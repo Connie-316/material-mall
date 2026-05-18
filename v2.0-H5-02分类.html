@@ -67,7 +67,7 @@
 
     .level1-bar {
       display: flex;
-      gap: 20px;
+      gap: 12px;
       padding: 12px 16px 14px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -75,17 +75,29 @@
     }
     .level1-bar::-webkit-scrollbar { display: none; }
     .level1-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 48px;
+      cursor: pointer;
+    }
+    .level1-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
       font-size: 14px;
+      font-weight: 600;
+    }
+    .level1-name {
+      font-size: 11px;
       color: #666;
       white-space: nowrap;
-      cursor: pointer;
-      padding: 4px 0;
     }
-    .level1-item.active {
-      color: #3370FF;
-      font-weight: 600;
-      border-bottom: 2px solid #3370FF;
-    }
+    .level1-item.active .level1-name { color: #3370FF; font-weight: 600; }
 
     .content {
       display: flex;
@@ -98,95 +110,56 @@
       width: 88px;
       flex-shrink: 0;
       background: #fff;
-      position: fixed;
-      top: 112px;
-      bottom: 70px;
-      left: calc(50% - 187.5px);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      border-right: 1px solid #F0F0F0;
+      padding: 12px 0;
     }
     .level2-item {
-      height: 50px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 13px;
       color: #666;
       cursor: pointer;
-      position: relative;
+      border-left: 3px solid transparent;
     }
     .level2-item.active {
-      background: #F5F8FF;
       color: #3370FF;
       font-weight: 600;
-    }
-    .level2-item.active::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: #3370FF;
+      border-left-color: #3370FF;
+      background: #F5F5F5;
     }
 
     .right-content {
       flex: 1;
-      margin-left: 88px;
-      padding: 16px 12px 12px;
-      margin-bottom: 12px;
+      padding: 12px 16px;
       overflow-y: auto;
     }
-
     .level2-group {
-      background: #fff;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
     }
     .level2-group-title {
       font-size: 14px;
       font-weight: 600;
       color: #333;
       margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .level2-group-title::before {
-      content: '';
-      width: 4px;
-      height: 16px;
-      background: #3370FF;
-      border-radius: 2px;
     }
     .level3-tags {
       display: flex;
       flex-wrap: wrap;
-      justify-content: flex-start;
-      gap: 10px 12px;
+      gap: 10px;
     }
     .level3-tag {
-      flex: 0 0 calc((100% - 24px) / 3);
-      padding: 10px 4px;
-      background: #F5F5F5;
-      border-radius: 4px;
+      padding: 8px 14px;
+      background: #fff;
+      border-radius: 8px;
       font-size: 12px;
       color: #666;
-      cursor: pointer;
-      text-align: center;
-      box-sizing: border-box;
-    }
-    .level3-tag:hover {
-      background: #E8F0FF;
-      color: #3370FF;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
     .level3-tag.active {
-      background: linear-gradient(135deg, #3370FF, #2860E0);
-      color: #fff;
-      font-weight: 500;
+      background: #E8F0FF;
+      color: #3370FF;
+      font-weight: 600;
     }
 
     .tab-bar {
@@ -213,11 +186,28 @@
       padding: 8px 0;
     }
     .tab-icon {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+    }
+    .tab-badge {
+      position: absolute;
+      top: -4px;
+      right: -8px;
+      min-width: 16px;
+      height: 16px;
+      background: #F02C2C;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
     }
     .tab-text { font-size: 11px; color: #999; }
     .tab-item.active .tab-text { color: #3370FF; font-weight: 600; }
@@ -249,12 +239,30 @@
         </div>
       </div>
       <div class="level1-bar" id="level1Bar">
-        <div class="level1-item active" data-index="0">冲压模具</div>
-        <div class="level1-item" data-index="1">注塑模具</div>
-        <div class="level1-item" data-index="2">检具夹具</div>
-        <div class="level1-item" data-index="3">通用零件</div>
-        <div class="level1-item" data-index="4">工具耗材</div>
-        <div class="level1-item" data-index="5">热门新品</div>
+        <div class="level1-item active" data-index="0">
+          <div class="level1-icon" style="background:linear-gradient(135deg,#E8F0FF,#B8D4FF);color:#3370FF;">冲压</div>
+          <span class="level1-name">冲压模具</span>
+        </div>
+        <div class="level1-item" data-index="1">
+          <div class="level1-icon" style="background:linear-gradient(135deg,#E8F0FF,#B8D4FF);color:#3370FF;">注塑</div>
+          <span class="level1-name">注塑模具</span>
+        </div>
+        <div class="level1-item" data-index="2">
+          <div class="level1-icon" style="background:linear-gradient(135deg,#E8F0FF,#B8D4FF);color:#3370FF;">检具</div>
+          <span class="level1-name">检具夹具</span>
+        </div>
+        <div class="level1-item" data-index="3">
+          <div class="level1-icon" style="background:linear-gradient(135deg,#E8F0FF,#B8D4FF);color:#3370FF;">通用</div>
+          <span class="level1-name">通用零件</span>
+        </div>
+        <div class="level1-item" data-index="4">
+          <div class="level1-icon" style="background:linear-gradient(135deg,#E8F0FF,#B8D4FF);color:#3370FF;">工具</div>
+          <span class="level1-name">工具耗材</span>
+        </div>
+        <div class="level1-item" data-index="5">
+          <div class="level1-icon" style="background:linear-gradient(135deg,#E8F0FF,#B8D4FF);color:#3370FF;">新品</div>
+          <span class="level1-name">热门新品</span>
+        </div>
       </div>
     </div>
 
@@ -302,6 +310,7 @@
             <path d="M17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/>
             <path d="M5 4L7 14H17L19 6H6"/>
           </svg>
+          <span class="tab-badge">3</span>
         </span>
         <span class="tab-text">购物车</span>
       </div>

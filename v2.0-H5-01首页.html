@@ -95,7 +95,7 @@
 
     .top-banner {
       margin: 16px 16px 0;
-      border-radius: 16px;
+      border-radius: 8px;
       overflow: hidden;
       position: relative;
       height: 160px;
@@ -136,7 +136,7 @@
     .small-banner {
       flex: 1;
       height: 90px;
-      border-radius: 14px;
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -187,7 +187,7 @@
     .category-grid {
       background: #fff;
       margin: 16px 16px 0;
-      border-radius: 14px;
+      border-radius: 8px;
       padding: 16px 16px 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       display: flex;
@@ -211,7 +211,7 @@
     .category-icon {
       width: 52px;
       height: 52px;
-      border-radius: 12px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -222,7 +222,7 @@
       background: linear-gradient(135deg, #E8F0FF, #B8D4FF);
     }
     .category-icon.img-icon { background: transparent; }
-    .category-icon.img-icon img { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; }
+    .category-icon.img-icon img { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; }
     .category-name { font-size: 11px; color: #333; white-space: nowrap; }
     .category-indicator {
       display: flex;
@@ -291,7 +291,7 @@
     .goods-section {
       background: #fff;
       margin: 16px 16px;
-      border-radius: 14px;
+      border-radius: 8px;
       padding: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
@@ -305,6 +305,7 @@
     .goods-tabs::-webkit-scrollbar { display: none; }
     .goods-tab {
       padding: 10px 18px 10px 0;
+      border-radius: 8px;
       font-size: 14px;
       color: #999;
       position: relative;
@@ -409,13 +410,29 @@
       padding: 8px 0;
     }
     .tab-icon {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
-    .tab-icon img { width: 28px; height: 28px; }
+    .tab-badge {
+      position: absolute;
+      top: -4px;
+      right: -8px;
+      min-width: 16px;
+      height: 16px;
+      background: #F02C2C;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
     .tab-text { font-size: 11px; color: #999; }
     .tab-item.active .tab-text { color: #3370FF; font-weight: 600; }
   </style>
@@ -659,6 +676,7 @@
             <path d="M17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/>
             <path d="M5 4L7 14H17L19 6H6"/>
           </svg>
+          <span class="tab-badge">3</span>
         </span>
         <span class="tab-text">购物车</span>
       </div>

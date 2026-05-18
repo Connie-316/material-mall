@@ -204,17 +204,27 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
       padding: 6px 10px;
       cursor: pointer;
+      position: relative;
     }
-    .action-icon-item svg { width: 22px; height: 22px; stroke: #666; fill: none; stroke-width: 1.5; }
-    .action-icon-text { font-size: 10px; color: #999; }
+    .action-icon-bg {
+      width: 36px;
+      height: 36px;
+      background: #E8F0FF;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .action-icon-item svg { width: 20px; height: 20px; stroke: #3370FF; fill: none; stroke-width: 1.8; }
+    .action-icon-text { font-size: 10px; color: #666; }
 
     .action-btn { flex: 1; display: flex; gap: 8px; }
     .btn-full {
       width: 100%;
-      padding: 12px 0;
+      padding: 13px 0;
       border: none;
       border-radius: 8px;
       font-size: 14px;
@@ -225,14 +235,14 @@
       cursor: not-allowed;
     }
     .btn-full.active {
-      background: linear-gradient(90deg, #FF6B35, #F02C2C);
-      box-shadow: 0 3px 8px rgba(240, 44, 44, 0.25);
+      background: #3370FF;
+      box-shadow: 0 2px 8px rgba(51,112,255,0.3);
       cursor: pointer;
     }
     .btn-split { display: none; width: 100%; gap: 8px; }
     .btn-cart, .btn-buy {
       flex: 1;
-      padding: 12px 0;
+      padding: 13px 0;
       border: none;
       border-radius: 8px;
       font-size: 14px;
@@ -241,8 +251,8 @@
     }
     .btn-cart {
       background: #fff;
-      color: #FF6B35;
-      border: 1.5px solid #FF6B35;
+      color: #F02C2C;
+      border: 1.5px solid #F02C2C;
       cursor: not-allowed;
     }
     .btn-cart.active { cursor: pointer; }
@@ -365,7 +375,7 @@
     }
     .modal-btn-confirm {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       background: linear-gradient(90deg, #FF6B35, #F02C2C);
       color: #fff;
       border: none;
@@ -484,15 +494,21 @@
     <div class="action-bar">
       <div class="action-icons">
         <div class="action-icon-item" onclick="location.href='v2.0-H5-01首页.html'">
-          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <div class="action-icon-bg">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+          </div>
           <span class="action-icon-text">首页</span>
         </div>
         <div class="action-icon-item" onclick="alert('客服')">
-          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div class="action-icon-bg">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h8"/><path d="M8 14h4"/></svg>
+          </div>
           <span class="action-icon-text">客服</span>
         </div>
         <div class="action-icon-item" onclick="location.href='v2.0-H5-03购物车.html'">
-          <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <div class="action-icon-bg">
+            <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/><path d="M9 6v4"/><path d="M15 6v4"/></svg>
+          </div>
           <span class="action-icon-text">购物车</span>
         </div>
       </div>
@@ -760,18 +776,15 @@
         btnSplit.style.display = 'none';
       } else if (!state.model || !state.spec) {
         btnFull.textContent = '请选择型号规格';
-        btnFull.className = 'btn-full active';
+        btnFull.className = 'btn-full';
         btnFull.style.display = 'block';
         btnSplit.style.display = 'none';
       } else {
-        btnFull.style.display = 'none';
-        btnSplit.style.display = 'flex';
-        btnCart.textContent = '加入购物车';
-        btnCart.className = 'btn-cart active';
-        btnBuy.textContent = '立即购买';
-        btnBuy.className = 'btn-buy active';
-        btnCart.onclick = function() { alert('加入购物车成功！'); };
-        btnBuy.onclick = function() { alert('立即购买！'); };
+        btnFull.textContent = '确定提交';
+        btnFull.className = 'btn-full active';
+        btnFull.style.display = 'block';
+        btnSplit.style.display = 'none';
+        btnFull.onclick = function() { alert('提交成功！'); };
       }
     }
 

@@ -22,124 +22,217 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    .content {
-      padding-bottom: 70px;
+    /* ========== 顶部状态栏 ========== */
+    .top-fixed {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 375px;
+      background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 22px;
+      padding: 0 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .status-left { font-family: -apple-system, BlinkMacSystemFont; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-icon { display: flex; align-items: center; }
 
-    /* 用户头部 */
+    /* ========== 用户头部 ========== */
     .user-header {
-      background: linear-gradient(135deg, #3370FF 0%, #2860E0 100%);
-      padding: 22px 16px 46px;
+      margin-top: 22px;
+      background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
+      padding: 30px 16px 60px;
       color: #fff;
     }
     .user-info {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
     .user-avatar {
-      width: 60px;
-      height: 60px;
+      width: 56px;
+      height: 56px;
       background: rgba(255,255,255,0.2);
       border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.5);
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .user-avatar svg { width: 30px; height: 30px; stroke: #fff; fill: none; }
-    .user-detail { flex: 1; }
-    .user-name { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+    .user-avatar svg { width: 28px; height: 28px; stroke: #fff; fill: none; }
+    .user-detail { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .user-name-row { display: flex; align-items: center; gap: 8px; }
+    .user-name { font-size: 18px; font-weight: 600; color: #fff; }
     .user-tag {
       display: inline-flex;
-      padding: 4px 12px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 12px;
-      font-size: 11px;
+      padding: 3px 10px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 10px;
+      font-size: 10px;
+      color: #fff;
     }
     .user-auth {
-      padding: 8px 16px;
+      padding: 6px 14px;
       background: #fff;
       color: #3370FF;
-      border-radius: 18px;
-      font-size: 12px;
+      border-radius: 16px;
+      font-size: 11px;
       font-weight: 600;
+      width: fit-content;
     }
 
-    /* 统计卡片 */
+    /* ========== 统计卡片 ========== */
     .stats-card {
       display: flex;
       margin: -36px 12px 0;
       background: #fff;
-      border-radius: 14px;
-      padding: 16px 14px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 14px 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      position: relative;
+      z-index: 2;
     }
-    .stat-item { flex: 1; text-align: center; }
-    .stat-num { font-size: 20px; font-weight: 700; color: #333; }
-    .stat-label { font-size: 12px; color: #999; margin-top: 5px; }
-    .stat-divider { width: 1px; background: #e5e5e5; margin: 0 10px; }
+    .stat-item { flex: 1; text-align: center; display: flex; flex-direction: column; gap: 4px; }
+    .stat-num { font-size: 18px; font-weight: 700; color: #333; }
+    .stat-label { font-size: 11px; color: #999; }
+    .stat-divider { width: 1px; background: #e5e5e5; margin: 0 8px; }
 
-    /* 订单入口 */
+    /* ========== 内容区域 ========== */
+    .content {
+      padding: 12px;
+    }
+
+    /* ========== Banner轮播 ========== */
+    .banner-card {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 80px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .banner-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .banner-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 14px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.5));
+      color: #fff;
+    }
+    .banner-title { font-size: 12px; font-weight: 500; }
+    .banner-dots {
+      position: absolute;
+      bottom: 8px;
+      right: 14px;
+      display: flex;
+      gap: 4px;
+    }
+    .banner-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+    .banner-dot.active { background: #fff; width: 12px; border-radius: 2px; }
+
+    /* ========== 订单入口 ========== */
     .orders-card {
       background: #fff;
-      margin: 14px 12px;
-      border-radius: 14px;
-      padding: 16px;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     .orders-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
-    .orders-title { font-size: 15px; font-weight: 600; color: #333; }
-    .orders-more { font-size: 12px; color: #999; }
+    .orders-title { font-size: 14px; font-weight: 600; color: #333; }
+    .orders-more { display: flex; align-items: center; gap: 2px; font-size: 11px; color: #999; }
+    .arrow { font-size: 14px; color: #ccc; }
     .orders-grid { display: flex; }
-    .order-item { flex: 1; text-align: center; cursor: pointer; }
+    .order-item { flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
     .order-icon {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       background: linear-gradient(135deg, #E8F0FF, #CCE0FF);
-      border-radius: 10px;
-      margin: 0 auto 8px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
-    .order-icon svg { width: 20px; height: 20px; stroke: #3370FF; fill: none; stroke-width: 1.5; }
-    .order-text { font-size: 12px; color: #666; }
+    .order-icon svg { width: 18px; height: 18px; stroke: #3370FF; fill: none; stroke-width: 1.5; }
+    .order-badge {
+      position: absolute;
+      top: -4px;
+      right: -6px;
+      min-width: 14px;
+      height: 14px;
+      background: #F02C2C;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 600;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+    }
+    .order-text { font-size: 11px; color: #666; }
 
-    /* 工具菜单 */
-    .tools-card {
+    /* ========== 我的服务 ========== */
+    .services-card {
       background: #fff;
-      margin: 0 12px;
-      border-radius: 14px;
-      overflow: hidden;
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-    .tool-item {
+    .services-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      padding: 15px 16px;
-      border-bottom: 1px solid #f0f0f0;
-      cursor: pointer;
+      margin-bottom: 12px;
     }
-    .tool-item:last-child { border-bottom: none; }
-    .tool-icon {
+    .services-title { font-size: 14px; font-weight: 600; color: #333; }
+    .services-more { font-size: 11px; color: #999; }
+    .services-grid {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .service-item {
+      width: 25%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 0;
+    }
+    .service-icon {
       width: 36px;
       height: 36px;
-      border-radius: 10px;
-      margin-right: 12px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .tool-icon svg { width: 20px; height: 20px; stroke-width: 1.5; fill: none; }
-    .tool-text { flex: 1; font-size: 14px; color: #333; }
-    .tool-arrow { color: #ccc; font-size: 15px; }
+    .service-icon svg { width: 20px; height: 20px; }
+    .service-text { font-size: 11px; color: #666; }
 
-    /* 底部Tab */
+    /* ========== 底部Tab ========== */
     .tab-bar {
       position: fixed;
       bottom: 0;
@@ -159,19 +252,35 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 2px;
       cursor: pointer;
-      padding: 8px 0;
+      padding: 6px 0;
     }
     .tab-icon {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
-    .tab-icon img { width: 28px; height: 28px; }
-    .tab-text { font-size: 11px; color: #999; }
+    .tab-badge {
+      position: absolute;
+      top: -4px;
+      right: -8px;
+      min-width: 16px;
+      height: 16px;
+      background: #F02C2C;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+    .tab-text { font-size: 10px; color: #999; }
     .tab-item.active .tab-text { color: #3370FF; font-weight: 600; }
   </style>
 </head>
@@ -179,103 +288,162 @@
 
   <div class="phone-frame">
 
-    <div class="content">
+    <!-- 顶部状态栏 -->
+    <div class="top-fixed">
+      <div class="status-bar">
+        <div class="status-left">9:41</div>
+        <div class="status-icons">
+          <span class="status-icon">
+            <svg width="18" height="14" viewBox="0 0 24 16"><rect x="0" y="5" width="22" height="10" rx="3" stroke="#fff" stroke-width="1.5" fill="none"/><rect x="22" y="7" width="2" height="6" rx="1" fill="#fff"/></svg>
+          </span>
+          <span class="status-icon">
+            <svg width="18" height="12" viewBox="0 0 24 12"><path d="M2 6 L6 2 L10 6 L14 2 L18 6 L22 2" stroke="#fff" stroke-width="1.5" fill="none"/></svg>
+          </span>
+          <span class="status-icon">
+            <svg width="18" height="12" viewBox="0 0 24 12"><rect x="0" y="0" width="22" height="12" rx="3" stroke="#fff" stroke-width="1.5" fill="none"/><rect x="22" y="3" width="2" height="6" rx="1" fill="#fff"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
 
-      <!-- 用户头部 -->
-      <div class="user-header">
-        <div class="user-info">
-          <div class="user-avatar">
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <div class="user-detail">
-            <div class="user-name">微信用户</div>
-            <div class="user-tag">个人用户</div>
+    <!-- 用户头部 -->
+    <div class="user-header">
+      <div class="user-info">
+        <div class="user-avatar">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="user-detail">
+          <div class="user-name-row">
+            <span class="user-name">微信用户</span>
+            <span class="user-tag">个人用户</span>
           </div>
           <div class="user-auth">立即认证</div>
         </div>
       </div>
+    </div>
 
-      <!-- 统计卡片 -->
-      <div class="stats-card">
-        <div class="stat-item">
-          <div class="stat-num">750</div>
-          <div class="stat-label">我的积分</div>
+    <!-- 统计卡片 - 2个模块 -->
+    <div class="stats-card">
+      <div class="stat-item">
+        <div class="stat-num">750</div>
+        <div class="stat-label">我的积分</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num">29</div>
+        <div class="stat-label">我的报价</div>
+      </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="content">
+
+      <!-- Banner轮播 -->
+      <div class="banner-card">
+        <img src="https://picsum.photos/375/80?random=100" alt="banner">
+        <div class="banner-overlay">
+          <span class="banner-title">新人专享福利</span>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <div class="stat-num">29</div>
-          <div class="stat-label">我的报价</div>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <div class="stat-num">5</div>
-          <div class="stat-label">收藏商品</div>
+        <div class="banner-dots">
+          <span class="banner-dot active"></span>
+          <span class="banner-dot"></span>
+          <span class="banner-dot"></span>
         </div>
       </div>
 
-      <!-- 订单入口 -->
+      <!-- 我的订单 -->
       <div class="orders-card">
         <div class="orders-header">
           <span class="orders-title">我的订单</span>
-          <span class="orders-more">查看全部 ›</span>
+          <span class="orders-more">查看全部 <span class="arrow">›</span></span>
         </div>
         <div class="orders-grid">
           <div class="order-item">
             <div class="order-icon">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <span class="order-badge">2</span>
             </div>
-            <div class="order-text">待付款</div>
+            <span class="order-text">待付款</span>
           </div>
           <div class="order-item">
             <div class="order-icon">
               <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+              <span class="order-badge">1</span>
             </div>
-            <div class="order-text">待发货</div>
+            <span class="order-text">待发货</span>
           </div>
           <div class="order-item">
             <div class="order-icon">
               <svg viewBox="0 0 24 24"><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              <span class="order-badge">5</span>
             </div>
-            <div class="order-text">待收货</div>
+            <span class="order-text">待收货</span>
           </div>
           <div class="order-item">
             <div class="order-icon">
               <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span class="order-badge">3</span>
             </div>
-            <div class="order-text">待评价</div>
+            <span class="order-text">待评价</span>
           </div>
         </div>
       </div>
 
-      <!-- 工具菜单 -->
-      <div class="tools-card">
-        <div class="tool-item">
-          <div class="tool-icon" style="background:#FFF2E8;">
-            <svg viewBox="0 0 24 24" stroke="#FF6B35"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          </div>
-          <span class="tool-text">我的优惠券</span>
-          <span class="tool-arrow">›</span>
+      <!-- 我的服务 -->
+      <div class="services-card">
+        <div class="services-header">
+          <span class="services-title">我的服务</span>
+          <span class="services-more">全部 ›</span>
         </div>
-        <div class="tool-item">
-          <div class="tool-icon" style="background:#FFF7E6;">
-            <svg viewBox="0 0 24 24" stroke="#FF9500"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 5v5l3 3"/></svg>
+        <div class="services-grid">
+          <div class="service-item">
+            <div class="service-icon" style="background:#E8F0FF;">
+              <svg viewBox="0 0 24 24" stroke="#3370FF" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <span class="service-text">我的优惠券</span>
           </div>
-          <span class="tool-text">历史浏览</span>
-          <span class="tool-arrow">›</span>
-        </div>
-        <div class="tool-item">
-          <div class="tool-icon" style="background:#F6FFED;">
-            <svg viewBox="0 0 24 24" stroke="#34C759"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <div class="service-item">
+            <div class="service-icon" style="background:#E8F0FF;">
+              <svg viewBox="0 0 24 24" stroke="#3370FF" fill="none"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <span class="service-text">历史浏览</span>
           </div>
-          <span class="tool-text">我的标签</span>
-          <span class="tool-arrow">›</span>
-        </div>
-        <div class="tool-item">
-          <div class="tool-icon" style="background:#F5F5F5;">
-            <svg viewBox="0 0 24 24" stroke="#666"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <div class="service-item">
+            <div class="service-icon" style="background:#E8F0FF;">
+              <svg viewBox="0 0 24 24" stroke="#3370FF" fill="none"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+            </div>
+            <span class="service-text">我的标签</span>
           </div>
-          <span class="tool-text">设置</span>
-          <span class="tool-arrow">›</span>
+          <div class="service-item">
+            <div class="service-icon" style="background:#E8F0FF;">
+              <svg viewBox="0 0 24 24" stroke="#3370FF" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <span class="service-text">地址管理</span>
+          </div>
+          <div class="service-item">
+            <div class="service-icon" style="background:#E8F0FF;">
+              <svg viewBox="0 0 24 24" stroke="#3370FF" fill="none"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+            </div>
+            <span class="service-text">帮助与反馈</span>
+          </div>
+          <div class="service-item">
+            <div class="service-icon" style="background:#E8F0FF;">
+              <svg viewBox="0 0 24 24" stroke="#3370FF" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06-.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <span class="service-text">设置</span>
+          </div>
+          <div class="service-item">
+            <div class="service-icon" style="background:#E8F0FF;">
+              <svg viewBox="0 0 24 24" stroke="#3370FF" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="service-text">关于我们</span>
+          </div>
+          <div class="service-item">
+            <div class="service-icon" style="background:#E8F0FF;">
+              <svg viewBox="0 0 24 24" stroke="#3370FF" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <span class="service-text">联系客服</span>
+          </div>
         </div>
       </div>
 
@@ -309,6 +477,7 @@
             <path d="M17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/>
             <path d="M5 4L7 14H17L19 6H6"/>
           </svg>
+          <span class="tab-badge">3</span>
         </span>
         <span class="tab-text">购物车</span>
       </div>
