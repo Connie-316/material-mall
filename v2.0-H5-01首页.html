@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>物料商城 - 首页</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #E8E8E8;
+      min-height: 100vh;
+    }
+
+    .phone-frame {
+      width: 375px;
+      margin: 0 auto;
+      background: #F5F5F5;
+      min-height: 100vh;
+      position: relative;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .top-fixed {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 375px;
+      background: #fff;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      padding-top: env(safe-area-inset-top);
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 22px;
+      padding: 0 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #333;
+    }
+    .status-left { font-family: -apple-system, BlinkMacSystemFont; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-icon { display: flex; align-items: center; }
+
+    .logo-search {
+      display: flex;
+      align-items: center;
+      padding: 6px 12px 8px;
+      gap: 10px;
+      background: #fff;
+    }
+    .logo {
+      width: 80px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #3370FF, #2860E0);
+    }
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .search-box {
+      flex: 1;
+      height: 34px;
+      background: #F5F5F5;
+      border-radius: 17px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 8px;
+    }
+    .search-box svg { width: 14px; height: 14px; color: #999; }
+    .search-text { font-size: 13px; color: #999; }
+
+    .content {
+      padding-top: 60px;
+      padding-bottom: 70px;
+      min-height: 100vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .top-banner {
+      margin: 16px 16px 0;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      height: 160px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #3370FF, #2860E0);
+    }
+    .top-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .banner-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.65));
+      color: #fff;
+    }
+    .banner-title { font-size: 18px; font-weight: 600; }
+    .banner-sub { font-size: 12px; opacity: 0.85; margin-top: 5px; }
+    .banner-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .banner-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+    .banner-dot.active { background: #fff; width: 18px; border-radius: 3px; }
+
+    .small-banners {
+      display: flex;
+      margin: 16px 16px 0;
+      gap: 12px;
+    }
+    .small-banner {
+      flex: 1;
+      height: 90px;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+    .small-banner-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .small-banner.left .small-banner-bg { background: linear-gradient(135deg, #FF6B35 0%, #F02C2C 100%); }
+    .small-banner.right .small-banner-bg { background: linear-gradient(135deg, #3370FF 0%, #2860E0 100%); }
+    .small-banner-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .small-banner-icon {
+      width: 32px;
+      height: 32px;
+      margin: 0 auto 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .small-banner-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .small-banner-sub { font-size: 10px; opacity: 0.9; }
+    .small-banner-arrow {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .small-banner-decoration {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 60px;
+      opacity: 0.8;
+    }
+
+    .category-grid {
+      background: #fff;
+      margin: 16px 16px 0;
+      border-radius: 14px;
+      padding: 16px 16px 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+    }
+    .category-scroll-wrapper { flex: 1; overflow: hidden; }
+    .category-scroll {
+      display: flex;
+      gap: 16px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-right: 8px;
+    }
+    .category-scroll::-webkit-scrollbar { display: none; }
+    .category-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 56px;
+    }
+    .category-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #3370FF;
+      background: linear-gradient(135deg, #E8F0FF, #B8D4FF);
+    }
+    .category-icon.img-icon { background: transparent; }
+    .category-icon.img-icon img { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; }
+    .category-name { font-size: 11px; color: #333; white-space: nowrap; }
+    .category-indicator {
+      display: flex;
+      justify-content: center;
+      padding-top: 6px;
+    }
+    .indicator-track {
+      width: 60px;
+      height: 4px;
+      background: #E5E5E5;
+      border-radius: 2px;
+      position: relative;
+    }
+    .indicator-thumb {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 32px;
+      height: 4px;
+      background: linear-gradient(90deg, #3370FF, #5C9EFF);
+      border-radius: 2px;
+    }
+
+    .mid-banner {
+      margin: 12px 16px 0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .credits-banner {
+      background: linear-gradient(135deg, #FFF8E1, #FFE0B2);
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 80px;
+    }
+    .credits-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .credits-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .credits-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .credits-title { font-size: 11px; color: #996600; }
+    .credits-value { font-size: 22px; font-weight: 700; color: #E65100; }
+    .credits-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .credits-btn {
+      font-size: 12px;
+      color: #FF9800;
+      font-weight: 600;
+    }
+
+    .goods-section {
+      background: #fff;
+      margin: 16px 16px;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .goods-tabs {
+      display: flex;
+      overflow-x: auto;
+      border-bottom: 1px solid #F0F0F0;
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    .goods-tabs::-webkit-scrollbar { display: none; }
+    .goods-tab {
+      padding: 10px 18px 10px 0;
+      font-size: 14px;
+      color: #999;
+      position: relative;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .goods-tab.active { color: #3370FF; font-weight: 600; }
+    .goods-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #3370FF;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .goods-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .goods-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+    }
+    .goods-card-img {
+      width: 100%;
+      height: 130px;
+      background: linear-gradient(135deg, #E8F0FF, #D0E0FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .goods-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .goods-card-info {
+      padding: 10px 10px 8px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .goods-card-name {
+      font-size: 13px;
+      color: #333;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .goods-card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+    .goods-card-price { font-size: 15px; font-weight: 700; color: #F02C2C; }
+    .goods-card-tag {
+      display: none;
+    }
+
+    .load-more {
+      text-align: center;
+      padding: 16px;
+      margin-top: 6px;
+    }
+    .load-more-btn {
+      display: inline-block;
+      padding: 8px 24px;
+      background: #F8F8F8;
+      border-radius: 16px;
+      font-size: 12px;
+      color: #999;
+      font-weight: 400;
+    }
+
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 375px;
+      background: #fff;
+      border-top: 1px solid #F0F0F0;
+      display: flex;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+    }
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+    .tab-icon {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tab-icon img { width: 28px; height: 28px; }
+    .tab-text { font-size: 11px; color: #999; }
+    .tab-item.active .tab-text { color: #3370FF; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+
+    <div class="top-fixed">
+      <div class="status-bar">
+        <div class="status-left">9:41</div>
+        <div class="status-icons">
+          <span class="status-icon">
+            <svg width="18" height="14" viewBox="0 0 24 16"><rect x="0" y="5" width="22" height="10" rx="3" stroke="#333" stroke-width="1.5" fill="none"/><rect x="22" y="7" width="2" height="6" rx="1" fill="#333"/></svg>
+          </span>
+          <span class="status-icon">
+            <svg width="18" height="12" viewBox="0 0 24 12"><path d="M2 6 L6 2 L10 6 L14 2 L18 6 L22 2" stroke="#333" stroke-width="1.5" fill="none"/></svg>
+          </span>
+          <span class="status-icon">
+            <svg width="18" height="12" viewBox="0 0 24 12"><rect x="0" y="0" width="22" height="12" rx="3" stroke="#333" stroke-width="1.5" fill="none"/><rect x="22" y="3" width="2" height="6" rx="1" fill="#333"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="logo-search">
+        <div class="logo">
+          <span style="font-size:12px;font-weight:700;color:#fff;letter-spacing:1px;">keytme</span>
+        </div>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <span class="search-text">搜索商品</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <div class="top-banner">
+        <img src="https://picsum.photos/375/160?random=1" alt="Banner" onerror="this.style.display='none'">
+        <div class="banner-overlay">
+          <div class="banner-title">精密模具现货供应</div>
+          <div class="banner-sub">源头工厂 品质保障 ›</div>
+          <div class="banner-dots">
+            <span class="banner-dot active"></span>
+            <span class="banner-dot"></span>
+            <span class="banner-dot"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="small-banners">
+        <div class="small-banner left">
+          <div class="small-banner-bg" style="background: linear-gradient(135deg, #FF7849 0%, #FF5722 50%, #E64A19 100%);"></div>
+          <div class="small-banner-decoration">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <circle cx="45" cy="10" r="20" fill="rgba(255,255,255,0.15)"/>
+              <circle cx="50" cy="50" r="25" fill="rgba(255,255,255,0.1)"/>
+              <path d="M15 45 L25 35 L35 45 L45 30 L55 40" stroke="rgba(255,255,255,0.2)" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="small-banner-content">
+            <div class="small-banner-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M21 5H3C2 5 1 6 1 7V19C1 20 2 21 3 21H21C22 21 23 20 23 19V7C23 6 22 5 21 5Z" stroke="#fff" stroke-width="1.5"/>
+                <path d="M1 10H23" stroke="#fff" stroke-width="1.5"/>
+                <path d="M8 14L11 17L16 12" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span class="small-banner-title">限时特惠</span>
+            <span class="small-banner-sub">新人专享优惠券</span>
+          </div>
+          <div class="small-banner-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+        </div>
+        <div class="small-banner right">
+          <div class="small-banner-bg" style="background: linear-gradient(135deg, #5C9EFF 0%, #3370FF 50%, #2860E0 100%);"></div>
+          <div class="small-banner-decoration">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <circle cx="10" cy="50" r="25" fill="rgba(255,255,255,0.1)"/>
+              <circle cx="50" cy="15" r="18" fill="rgba(255,255,255,0.15)"/>
+              <circle cx="30" cy="30" r="8" fill="rgba(255,255,255,0.1)"/>
+            </svg>
+          </div>
+          <div class="small-banner-content">
+            <div class="small-banner-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#fff" stroke="#fff" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <span class="small-banner-title">热门推荐</span>
+            <span class="small-banner-sub">热销商品抢先看</span>
+          </div>
+          <div class="small-banner-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="category-grid">
+        <div class="category-scroll-wrapper">
+          <div class="category-scroll">
+            <div class="category-item">
+              <div class="category-icon" style="background: linear-gradient(135deg, #E8F0FF, #B8D4FF); color: #3370FF;">冲压</div>
+              <span class="category-name">冲压模具</span>
+            </div>
+            <div class="category-item">
+              <div class="category-icon" style="background: linear-gradient(135deg, #E8F0FF, #B8D4FF); color: #3370FF;">注塑</div>
+              <span class="category-name">注塑模具</span>
+            </div>
+            <div class="category-item">
+              <div class="category-icon" style="background: linear-gradient(135deg, #E8F0FF, #B8D4FF); color: #3370FF;">检具</div>
+              <span class="category-name">检具夹具</span>
+            </div>
+            <div class="category-item">
+              <div class="category-icon" style="background: linear-gradient(135deg, #E8F0FF, #B8D4FF); color: #3370FF;">通用</div>
+              <span class="category-name">通用零件</span>
+            </div>
+            <div class="category-item">
+              <div class="category-icon" style="background: linear-gradient(135deg, #E8F0FF, #B8D4FF); color: #3370FF;">原料</div>
+              <span class="category-name">通用材料</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="category-indicator">
+        <div class="indicator-track">
+          <div class="indicator-thumb"></div>
+        </div>
+      </div>
+
+      <div class="mid-banner">
+        <div class="credits-banner">
+          <div class="credits-left">
+            <div class="credits-icon">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                <circle cx="18" cy="18" r="16" fill="#FFF3E0"/>
+                <path d="M18 8 L22 16 L18 14 L14 16 Z" fill="#FF9800"/>
+                <circle cx="18" cy="22" r="6" fill="#FF9800"/>
+                <path d="M18 18 L18 26" stroke="#FF9800" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="credits-info">
+              <span class="credits-title">我的积分</span>
+              <span class="credits-value">750</span>
+            </div>
+          </div>
+          <div class="credits-right">
+            <span class="credits-btn">积分商城</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF9800" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="goods-section">
+        <div class="goods-tabs">
+          <div class="goods-tab active">每日上新</div>
+          <div class="goods-tab">品牌优选</div>
+          <div class="goods-tab">精选好物</div>
+          <div class="goods-tab">热卖商品</div>
+          <div class="goods-tab">新品推荐</div>
+        </div>
+
+        <div class="goods-grid">
+          <div class="goods-card" onclick="location.href='v2.0-H5-05商品详情.html'">
+            <div class="goods-card-img">
+              <img src="https://picsum.photos/200/200?random=21" alt="商品图片">
+            </div>
+            <div class="goods-card-info">
+              <div class="goods-card-name">数智聚模定位键 QTDW201-20-45</div>
+              <div class="goods-card-bottom">
+                <span class="goods-card-price">¥2699</span>
+              </div>
+            </div>
+          </div>
+          <div class="goods-card" onclick="location.href='v2.0-H5-05商品详情.html'">
+            <div class="goods-card-img">
+              <img src="https://picsum.photos/200/200?random=22" alt="商品图片">
+            </div>
+            <div class="goods-card-info">
+              <div class="goods-card-name">精密导柱组件 标准型</div>
+              <div class="goods-card-bottom">
+                <span class="goods-card-price">¥1580</span>
+              </div>
+            </div>
+          </div>
+          <div class="goods-card" onclick="location.href='v2.0-H5-05商品详情.html'">
+            <div class="goods-card-img">
+              <img src="https://picsum.photos/200/200?random=23" alt="商品图片">
+            </div>
+            <div class="goods-card-info">
+              <div class="goods-card-name">冲头固定座 精密型</div>
+              <div class="goods-card-bottom">
+                <span class="goods-card-price">¥899</span>
+              </div>
+            </div>
+          </div>
+          <div class="goods-card" onclick="location.href='v2.0-H5-05商品详情.html'">
+            <div class="goods-card-img">
+              <img src="https://picsum.photos/200/200?random=24" alt="商品图片">
+            </div>
+            <div class="goods-card-info">
+              <div class="goods-card-name">入子凹模 标准件</div>
+              <div class="goods-card-bottom">
+                <span class="goods-card-price">¥599</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="load-more">
+          <span class="load-more-btn">点击加载更多</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item active">
+        <span class="tab-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#3370FF">
+            <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z"/>
+          </svg>
+        </span>
+        <span class="tab-text">首页</span>
+      </div>
+      <div class="tab-item" onclick="location.href='v2.0-H5-02分类.html'">
+        <span class="tab-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#999">
+            <rect x="3" y="3" width="8" height="8" rx="2"/>
+            <rect x="13" y="3" width="8" height="8" rx="2"/>
+            <rect x="3" y="13" width="8" height="8" rx="2"/>
+            <rect x="13" y="13" width="8" height="8" rx="2"/>
+          </svg>
+        </span>
+        <span class="tab-text">分类</span>
+      </div>
+      <div class="tab-item" onclick="location.href='v2.0-H5-03购物车.html'">
+        <span class="tab-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#999">
+            <path d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18Z"/>
+            <path d="M17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/>
+            <path d="M5 4L7 14H17L19 6H6"/>
+          </svg>
+        </span>
+        <span class="tab-text">购物车</span>
+      </div>
+      <div class="tab-item" onclick="location.href='v2.0-H5-04我的.html'">
+        <span class="tab-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#999">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M12 14C8.7 14 6 16.2 6 19H18C18 16.2 15.3 14 12 14Z"/>
+          </svg>
+        </span>
+        <span class="tab-text">我的</span>
+      </div>
+    </div>
+          </svg>
+        </span>
+        <span class="tab-text">我的</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    document.querySelectorAll('.goods-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.goods-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

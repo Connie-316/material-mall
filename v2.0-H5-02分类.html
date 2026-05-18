@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>物料商城 - 分类</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #E8E8E8;
+      min-height: 100vh;
+    }
+
+    .phone-frame {
+      width: 375px;
+      margin: 0 auto;
+      background: #F5F5F5;
+      min-height: 100vh;
+      position: relative;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .top-fixed {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 375px;
+      background: #fff;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 22px;
+      padding: 0 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #333;
+    }
+    .status-left { font-family: -apple-system, BlinkMacSystemFont; }
+    .status-icons { display: flex; align-items: center; gap: 4px; }
+    .status-icon { display: flex; align-items: center; }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px 12px;
+    }
+    .search-box {
+      flex: 1;
+      height: 34px;
+      background: #F5F5F5;
+      border-radius: 17px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 8px;
+    }
+    .search-box svg { width: 14px; height: 14px; color: #999; }
+    .search-text { font-size: 13px; color: #999; }
+
+    .level1-bar {
+      display: flex;
+      gap: 20px;
+      padding: 12px 16px 14px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .level1-bar::-webkit-scrollbar { display: none; }
+    .level1-item {
+      font-size: 14px;
+      color: #666;
+      white-space: nowrap;
+      cursor: pointer;
+      padding: 4px 0;
+    }
+    .level1-item.active {
+      color: #3370FF;
+      font-weight: 600;
+      border-bottom: 2px solid #3370FF;
+    }
+
+    .content {
+      display: flex;
+      padding-top: 112px;
+      padding-bottom: 70px;
+      min-height: 100vh;
+    }
+
+    .level2-sidebar {
+      width: 88px;
+      flex-shrink: 0;
+      background: #fff;
+      position: fixed;
+      top: 112px;
+      bottom: 70px;
+      left: calc(50% - 187.5px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      border-right: 1px solid #F0F0F0;
+    }
+    .level2-item {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+      position: relative;
+    }
+    .level2-item.active {
+      background: #F5F8FF;
+      color: #3370FF;
+      font-weight: 600;
+    }
+    .level2-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #3370FF;
+    }
+
+    .right-content {
+      flex: 1;
+      margin-left: 88px;
+      padding: 16px 12px 12px;
+      margin-bottom: 12px;
+      overflow-y: auto;
+    }
+
+    .level2-group {
+      background: #fff;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .level2-group-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .level2-group-title::before {
+      content: '';
+      width: 4px;
+      height: 16px;
+      background: #3370FF;
+      border-radius: 2px;
+    }
+    .level3-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 10px 12px;
+    }
+    .level3-tag {
+      flex: 0 0 calc((100% - 24px) / 3);
+      padding: 10px 4px;
+      background: #F5F5F5;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #666;
+      cursor: pointer;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .level3-tag:hover {
+      background: #E8F0FF;
+      color: #3370FF;
+    }
+    .level3-tag.active {
+      background: linear-gradient(135deg, #3370FF, #2860E0);
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 375px;
+      background: #fff;
+      border-top: 1px solid #F0F0F0;
+      display: flex;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+    }
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+    .tab-icon {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tab-text { font-size: 11px; color: #999; }
+    .tab-item.active .tab-text { color: #3370FF; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+
+    <div class="top-fixed">
+      <div class="status-bar">
+        <div class="status-left">9:41</div>
+        <div class="status-icons">
+          <span class="status-icon">
+            <svg width="18" height="14" viewBox="0 0 24 16"><rect x="0" y="5" width="22" height="10" rx="3" stroke="#333" stroke-width="1.5" fill="none"/><rect x="22" y="7" width="2" height="6" rx="1" fill="#333"/></svg>
+          </span>
+          <span class="status-icon">
+            <svg width="18" height="12" viewBox="0 0 24 12"><path d="M2 6 L6 2 L10 6 L14 2 L18 6 L22 2" stroke="#333" stroke-width="1.5" fill="none"/></svg>
+          </span>
+          <span class="status-icon">
+            <svg width="18" height="12" viewBox="0 0 24 12"><rect x="0" y="0" width="22" height="12" rx="3" stroke="#333" stroke-width="1.5" fill="none"/><rect x="22" y="3" width="2" height="6" rx="1" fill="#333"/></svg>
+          </span>
+        </div>
+      </div>
+      <div class="search-bar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <span class="search-text">搜索商品</span>
+        </div>
+      </div>
+      <div class="level1-bar" id="level1Bar">
+        <div class="level1-item active" data-index="0">冲压模具</div>
+        <div class="level1-item" data-index="1">注塑模具</div>
+        <div class="level1-item" data-index="2">检具夹具</div>
+        <div class="level1-item" data-index="3">通用零件</div>
+        <div class="level1-item" data-index="4">工具耗材</div>
+        <div class="level1-item" data-index="5">热门新品</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="level2-sidebar" id="level2Sidebar">
+        <div class="level2-item active" data-index="0">冲裁零件</div>
+        <div class="level2-item" data-index="1">入子凹模</div>
+        <div class="level2-item" data-index="2">冲头</div>
+        <div class="level2-item" data-index="3">冲头固定座</div>
+        <div class="level2-item" data-index="4">导柱导套</div>
+        <div class="level2-item" data-index="5">模具标准件</div>
+        <div class="level2-item" data-index="6">垫片垫圈</div>
+        <div class="level2-item" data-index="7">弹簧</div>
+      </div>
+
+      <div class="right-content" id="rightContent">
+        <!-- 三级类目分组将动态生成 -->
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-item" onclick="location.href='v2.0-H5-01首页.html'">
+        <span class="tab-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#999">
+            <path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z"/>
+          </svg>
+        </span>
+        <span class="tab-text">首页</span>
+      </div>
+      <div class="tab-item active">
+        <span class="tab-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#3370FF">
+            <rect x="3" y="3" width="8" height="8" rx="2"/>
+            <rect x="13" y="3" width="8" height="8" rx="2"/>
+            <rect x="3" y="13" width="8" height="8" rx="2"/>
+            <rect x="13" y="13" width="8" height="8" rx="2"/>
+          </svg>
+        </span>
+        <span class="tab-text">分类</span>
+      </div>
+      <div class="tab-item" onclick="location.href='v2.0-H5-03购物车.html'">
+        <span class="tab-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#999">
+            <path d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18Z"/>
+            <path d="M17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z"/>
+            <path d="M5 4L7 14H17L19 6H6"/>
+          </svg>
+        </span>
+        <span class="tab-text">购物车</span>
+      </div>
+      <div class="tab-item" onclick="location.href='v2.0-H5-04我的.html'">
+        <span class="tab-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#999">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M12 14C8.7 14 6 16.2 6 19H18C18 16.2 15.3 14 12 14Z"/>
+          </svg>
+        </span>
+        <span class="tab-text">我的</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const level1Bar = document.getElementById('level1Bar');
+    const level1Items = level1Bar.querySelectorAll('.level1-item');
+    const level2Sidebar = document.getElementById('level2Sidebar');
+    const level2Items = level2Sidebar.querySelectorAll('.level2-item');
+    const rightContent = document.getElementById('rightContent');
+
+    const level1Names = ['冲压模具', '注塑模具', '检具夹具', '通用零件', '工具耗材', '热门新品'];
+
+    const level1Data = [
+      ['冲裁零件', '入子凹模', '冲头', '冲头固定座', '导柱导套', '模具标准件', '垫片垫圈', '弹簧'],
+      ['注塑模具类', '模具配件', '模架', '热流道', '模具标准件', '顶针', '复位机构', '冷却系统'],
+      ['检具类', '夹具类', '定位装置', '测量工具', '固定夹具', '专用检具', '组合夹具', '气动夹具'],
+      ['紧固件', '连接件', '传动件', '弹簧', '垫圈', '螺钉', '螺母', '销键'],
+      ['切削工具', '测量工具', '夹具', '润滑剂', '清洗剂', '包装材料', '安全用品', '维护工具'],
+      ['新品专区', '热门商品', '促销商品', '推荐商品', '新品上架', '热销排行', '折扣专区', '清仓特卖']
+    ];
+
+    function renderLevel3Groups(l1Index, l2Index = 0) {
+      const l2Categories = level1Data[l1Index];
+      rightContent.innerHTML = l2Categories.map((l2Name, l2Idx) => `
+        <div class="level2-group" data-l2-index="${l2Idx}">
+          <div class="level2-group-title">${l2Name}</div>
+          <div class="level3-tags">
+            ${l2Categories.map(tag => `<div class="level3-tag" data-l1="${l1Index}" data-l2="${l2Idx}">${tag}</div>`).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      bindLevel3Events();
+    }
+
+    function selectLevel1(index) {
+      level1Items.forEach(item => item.classList.remove('active'));
+      level1Items[index].classList.add('active');
+
+      level2Items.forEach((item, i) => {
+        item.classList.remove('active');
+        if (i === 0) item.classList.add('active');
+      });
+
+      const activeItem = level1Items[index];
+      const scrollTarget = activeItem.offsetLeft - level1Bar.offsetWidth / 2 + activeItem.offsetWidth / 2;
+      level1Bar.scrollTo({ left: Math.max(0, scrollTarget), behavior: 'smooth' });
+
+      renderLevel3Groups(index, 0);
+    }
+
+    function selectLevel2(item) {
+      const l2Index = parseInt(item.dataset.index);
+      level2Items.forEach(t => t.classList.remove('active'));
+      item.classList.add('active');
+
+      const l1Index = Array.from(level1Items).findIndex(item => item.classList.contains('active'));
+      renderLevel3Groups(l1Index, l2Index);
+    }
+
+    function selectLevel3(item) {
+      const l1Index = parseInt(item.dataset.l1);
+      const l2Index = parseInt(item.dataset.l2);
+
+      level1Items.forEach(t => t.classList.remove('active'));
+      level1Items[l1Index].classList.add('active');
+
+      level2Items.forEach(t => t.classList.remove('active'));
+      level2Items[l2Index].classList.add('active');
+
+      document.querySelectorAll('.level3-tag').forEach(t => t.classList.remove('active'));
+      item.classList.add('active');
+
+      const scrollTarget = level1Items[l1Index].offsetLeft - level1Bar.offsetWidth / 2 + level1Items[l1Index].offsetWidth / 2;
+      level1Bar.scrollTo({ left: Math.max(0, scrollTarget), behavior: 'smooth' });
+    }
+
+    function bindLevel3Events() {
+      document.querySelectorAll('.level3-tag').forEach(item => {
+        item.onclick = () => selectLevel3(item);
+      });
+    }
+
+    level1Items.forEach((item, index) => {
+      item.addEventListener('click', () => selectLevel1(index));
+    });
+
+    level2Items.forEach(item => {
+      item.addEventListener('click', () => selectLevel2(item));
+    });
+
+    renderLevel3Groups(0, 0);
+  </script>
+
+</body>
+</html>
