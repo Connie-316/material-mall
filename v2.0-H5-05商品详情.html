@@ -105,7 +105,6 @@
       background: #fff;
       margin-top: 10px;
       padding: 14px;
-      cursor: pointer;
     }
     .sku-row {
       display: flex;
@@ -116,6 +115,13 @@
     }
     .sku-row:last-child { border-bottom: none; }
     .sku-label { font-size: 13px; color: #999; }
+    .sku-row-click {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      cursor: pointer;
+    }
     .sku-value { font-size: 13px; color: #666; display: flex; align-items: center; gap: 4px; }
     .sku-value.has-value { color: #333; }
     .sku-value .arrow { color: #ccc; }
@@ -132,7 +138,6 @@
     .delivery-content { flex: 1; }
     .delivery-city { font-size: 13px; color: #666; margin-bottom: 4px; }
     .delivery-time { font-size: 11px; color: #999; }
-    .delivery-change { font-size: 12px; color: #3370FF; }
 
     .shop-section {
       background: #fff;
@@ -206,6 +211,7 @@
       cursor: not-allowed;
       background: #ccc;
       color: #fff;
+      text-align: center;
     }
     .btn-main.active {
       background: linear-gradient(90deg, #FF6B35, #F02C2C);
@@ -290,8 +296,9 @@
       gap: 8px;
       flex: 1;
     }
-    .address-text.has-value { color: #333; }
+    .address-text { font-size: 13px; }
     .address-text.empty { color: #3370FF; }
+    .address-text.has-value { color: #333; }
     .address-arrow { color: #ccc; }
   </style>
 </head>
@@ -337,19 +344,12 @@
         </div>
       </div>
 
-      <div class="sku-section" id="skuSection">
-        <div class="sku-row" id="addressRow">
+      <div class="sku-section">
+        <div class="sku-row-click" id="addressRow">
           <span class="sku-label">地址</span>
           <div class="address-display">
-            <span class="address-text empty" id="addressText">请填写地址</span>
+            <span class="address-text" id="addressText">请填写地址</span>
             <span class="address-arrow">›</span>
-          </div>
-        </div>
-        <div class="sku-row" id="specRow">
-          <span class="sku-label">型号规格</span>
-          <div class="sku-value">
-            <span id="specText" class="empty">请选择型号规格</span>
-            <span class="arrow">›</span>
           </div>
         </div>
       </div>
@@ -359,6 +359,16 @@
         <div class="delivery-content">
           <div class="delivery-city" id="deliveryAddress">请填写收货地址</div>
           <div class="delivery-time">预计2-3天送达 · 快递免运费</div>
+        </div>
+      </div>
+
+      <div class="sku-section">
+        <div class="sku-row-click" id="specRow">
+          <span class="sku-label">型号规格</span>
+          <div class="sku-value">
+            <span id="specText">请选择型号规格</span>
+            <span class="arrow">›</span>
+          </div>
         </div>
       </div>
 
@@ -412,7 +422,7 @@
         </div>
       </div>
       <div class="action-btn">
-        <div class="btn-main" id="btnMain" onclick="handleBtnClick()">请先登录</div>
+        <div class="btn-main" id="btnMain">请先登录</div>
       </div>
     </div>
 
@@ -420,82 +430,142 @@
 
   <div class="modal-overlay" id="modalOverlay"></div>
 
-  <!-- 地址弹窗 -->
   <div class="sku-modal" id="addressModal">
     <div class="modal-header">
       <span class="modal-title">选择地址</span>
-      <span class="modal-close" onclick="closeModal()">×</span>
+      <span class="modal-close" id="closeAddressModal">×</span>
     </div>
     <div class="modal-content">
-      <div class="modal-section">
-        <div class="modal-options">
-          <span class="modal-option" onclick="selectAddress('广东省深圳市南山区')">广东省深圳市南山区</span>
-          <span class="modal-option" onclick="selectAddress('上海市浦东新区')">上海市浦东新区</span>
-          <span class="modal-option" onclick="selectAddress('北京市朝阳区')">北京市朝阳区</span>
-          <span class="modal-option" onclick="selectAddress('浙江省杭州市西湖区')">浙江省杭州市西湖区</span>
-          <span class="modal-option" onclick="selectAddress('江苏省南京市鼓楼区')">江苏省南京市鼓楼区</span>
-        </div>
+      <div class="modal-options">
+        <span class="modal-option" data-addr="广东省深圳市南山区">广东省深圳市南山区</span>
+        <span class="modal-option" data-addr="上海市浦东新区">上海市浦东新区</span>
+        <span class="modal-option" data-addr="北京市朝阳区">北京市朝阳区</span>
+        <span class="modal-option" data-addr="浙江省杭州市西湖区">浙江省杭州市西湖区</span>
+        <span class="modal-option" data-addr="江苏省南京市鼓楼区">江苏省南京市鼓楼区</span>
       </div>
     </div>
   </div>
 
-  <!-- 型号规格弹窗 -->
   <div class="sku-modal" id="specModal">
     <div class="modal-header">
       <span class="modal-title">选择型号规格</span>
-      <span class="modal-close" onclick="closeModal()">×</span>
+      <span class="modal-close" id="closeSpecModal">×</span>
     </div>
     <div class="modal-content">
       <div class="modal-section">
         <div class="modal-section-title">型号</div>
         <div class="modal-options">
-          <span class="modal-option" onclick="selectModel('CCAE-JCD-D10-L16-PC2-W2')">CCAE-JCD-D10-L16-PC2-W2</span>
-          <span class="modal-option" onclick="selectModel('CCBE-JCD-D10-L16-PC2-W2')">CCBE-JCD-D10-L16-PC2-W2</span>
-          <span class="modal-option" onclick="selectModel('CCCE-JCD-D10-L16-PC2-W2')">CCCE-JCD-D10-L16-PC2-W2</span>
-          <span class="modal-option" onclick="selectModel('CCDE-JCD-D10-L16-PC2-W2')">CCDE-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" data-model="CCAE-JCD-D10-L16-PC2-W2">CCAE-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" data-model="CCBE-JCD-D10-L16-PC2-W2">CCBE-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" data-model="CCCE-JCD-D10-L16-PC2-W2">CCCE-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" data-model="CCDE-JCD-D10-L16-PC2-W2">CCDE-JCD-D10-L16-PC2-W2</span>
         </div>
       </div>
       <div class="modal-section">
         <div class="modal-section-title">规格</div>
         <div class="modal-options">
-          <span class="modal-option" onclick="selectSpec('标准件')">标准件</span>
-          <span class="modal-option" onclick="selectSpec('定制件')">定制件</span>
-          <span class="modal-option" onclick="selectSpec('标准件+包装')">标准件+包装</span>
-          <span class="modal-option" onclick="selectSpec('定制件+包装')">定制件+包装</span>
+          <span class="modal-option" data-spec="标准件">标准件</span>
+          <span class="modal-option" data-spec="定制件">定制件</span>
+          <span class="modal-option" data-spec="标准件+包装">标准件+包装</span>
+          <span class="modal-option" data-spec="定制件+包装">定制件+包装</span>
         </div>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="modal-btn-confirm" id="specConfirmBtn" onclick="confirmSpec()">确定</button>
+      <button class="modal-btn-confirm" id="specConfirmBtn">确定</button>
     </div>
   </div>
 
   <script>
-    let state = {
+    var state = {
       isLoggedIn: true,
       address: null,
       model: null,
       spec: null
     };
 
-    const btnMain = document.getElementById('btnMain');
+    var btnMain = document.getElementById('btnMain');
+    var modalOverlay = document.getElementById('modalOverlay');
 
     function openModal(modalId) {
-      document.getElementById('modalOverlay').classList.add('show');
+      modalOverlay.classList.add('show');
       document.getElementById(modalId).classList.add('show');
     }
 
     function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('show');
-      document.querySelectorAll('.sku-modal').forEach(m => m.classList.remove('show'));
+      modalOverlay.classList.remove('show');
+      document.querySelectorAll('.sku-modal').forEach(function(m) {
+        m.classList.remove('show');
+      });
     }
 
-    document.getElementById('addressRow').addEventListener('click', () => openModal('addressModal'));
-    document.getElementById('specRow').addEventListener('click', () => openModal('specModal'));
-    document.getElementById('modalOverlay').addEventListener('click', closeModal);
+    document.getElementById('addressRow').addEventListener('click', function() {
+      openModal('addressModal');
+    });
+
+    document.getElementById('specRow').addEventListener('click', function() {
+      openModal('specModal');
+    });
+
+    modalOverlay.addEventListener('click', function(e) {
+      if (e.target === modalOverlay) {
+        closeModal();
+      }
+    });
+
+    document.getElementById('closeAddressModal').addEventListener('click', closeModal);
+    document.getElementById('closeSpecModal').addEventListener('click', closeModal);
+
+    document.querySelectorAll('#addressModal .modal-option').forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        var addr = this.getAttribute('data-addr');
+        state.address = addr;
+        updateUI();
+        closeModal();
+      });
+    });
+
+    var selectedModel = null;
+    var selectedSpec = null;
+
+    document.querySelectorAll('#specModal .modal-option[data-model]').forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        document.querySelectorAll('#specModal .modal-option[data-model]').forEach(function(o) {
+          o.classList.remove('selected');
+        });
+        this.classList.add('selected');
+        selectedModel = this.getAttribute('data-model');
+        updateSpecConfirmBtn();
+      });
+    });
+
+    document.querySelectorAll('#specModal .modal-option[data-spec]').forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        document.querySelectorAll('#specModal .modal-option[data-spec]').forEach(function(o) {
+          o.classList.remove('selected');
+        });
+        this.classList.add('selected');
+        selectedSpec = this.getAttribute('data-spec');
+        updateSpecConfirmBtn();
+      });
+    });
+
+    function updateSpecConfirmBtn() {
+      var btn = document.getElementById('specConfirmBtn');
+      btn.disabled = !(selectedModel && selectedSpec);
+    }
+
+    document.getElementById('specConfirmBtn').addEventListener('click', function() {
+      if (selectedModel && selectedSpec) {
+        state.model = selectedModel;
+        state.spec = selectedSpec;
+        updateUI();
+        closeModal();
+      }
+    });
 
     function updateUI() {
-      const addressText = document.getElementById('addressText');
+      var addressText = document.getElementById('addressText');
       if (state.address) {
         addressText.textContent = state.address;
         addressText.className = 'address-text has-value';
@@ -506,14 +576,13 @@
         document.getElementById('deliveryAddress').textContent = '请填写收货地址';
       }
 
-      const specText = document.getElementById('specText');
+      var specText = document.getElementById('specText');
       if (state.model && state.spec) {
         specText.textContent = state.model + ' / ' + state.spec;
         specText.className = 'has-value';
         specText.style.color = '#333';
       } else {
         specText.textContent = '请选择型号规格';
-        specText.className = '';
         specText.style.color = '#3370FF';
       }
 
@@ -524,77 +593,24 @@
       if (!state.isLoggedIn) {
         btnMain.textContent = '请先登录';
         btnMain.className = 'btn-main';
-        btnMain.onclick = () => alert('请先登录');
+        btnMain.onclick = null;
       } else if (!state.address) {
         btnMain.textContent = '请填写地址';
         btnMain.className = 'btn-main';
-        btnMain.onclick = () => openModal('addressModal');
+        btnMain.onclick = null;
       } else if (!state.model || !state.spec) {
         btnMain.textContent = '请选择型号规格';
         btnMain.className = 'btn-main';
-        btnMain.onclick = () => openModal('specModal');
+        btnMain.onclick = null;
       } else {
         btnMain.textContent = '加入购物车';
         btnMain.className = 'btn-main active';
-        btnMain.onclick = () => {
-          alert('加入购物车成功！\n型号：' + state.model + '\n规格：' + state.spec);
+        btnMain.onclick = function() {
+          alert('加入购物车成功！');
         };
       }
     }
 
-    function selectAddress(addr) {
-      state.address = addr;
-      document.querySelectorAll('#addressModal .modal-option').forEach(opt => {
-        opt.classList.remove('selected');
-        if (opt.textContent === addr) opt.classList.add('selected');
-      });
-      updateUI();
-      closeModal();
-    }
-
-    function selectModel(model) {
-      state.model = model;
-      document.querySelectorAll('#specModal .modal-option').forEach(opt => {
-        if (opt.textContent === model || opt.textContent === state.spec) {
-          opt.classList.remove('selected');
-        }
-      });
-      document.querySelectorAll('#specModal .modal-option').forEach(opt => {
-        if (opt.textContent === model) opt.classList.add('selected');
-      });
-      updateConfirmBtn();
-    }
-
-    function selectSpec(spec) {
-      state.spec = spec;
-      document.querySelectorAll('#specModal .modal-option').forEach(opt => {
-        if (opt.textContent === spec || opt.textContent === state.model) {
-          opt.classList.remove('selected');
-        }
-      });
-      document.querySelectorAll('#specModal .modal-option').forEach(opt => {
-        if (opt.textContent === spec) opt.classList.add('selected');
-      });
-      updateConfirmBtn();
-    }
-
-    function updateConfirmBtn() {
-      const btn = document.getElementById('specConfirmBtn');
-      btn.disabled = !(state.model && state.spec);
-    }
-
-    function confirmSpec() {
-      if (state.model && state.spec) {
-        updateUI();
-        closeModal();
-      }
-    }
-
-    function handleBtnClick() {
-      // 由按钮的onclick处理
-    }
-
-    // 初始化
     state.address = '广东省深圳市南山区';
     updateUI();
   </script>
