@@ -212,6 +212,24 @@
     .action-icon-text { font-size: 10px; color: #999; }
 
     .action-btn { flex: 1; display: flex; gap: 8px; }
+    .btn-full {
+      width: 100%;
+      padding: 12px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      background: #ccc;
+      color: #fff;
+      cursor: not-allowed;
+    }
+    .btn-full.active {
+      background: linear-gradient(90deg, #FF6B35, #F02C2C);
+      box-shadow: 0 3px 8px rgba(240, 44, 44, 0.25);
+      cursor: pointer;
+    }
+    .btn-split { display: none; width: 100%; gap: 8px; }
     .btn-cart, .btn-buy {
       flex: 1;
       padding: 12px 0;
@@ -227,9 +245,7 @@
       border: 1.5px solid #FF6B35;
       cursor: not-allowed;
     }
-    .btn-cart.active {
-      cursor: pointer;
-    }
+    .btn-cart.active { cursor: pointer; }
     .btn-buy {
       background: #ccc;
       color: #fff;
@@ -481,8 +497,11 @@
         </div>
       </div>
       <div class="action-btn">
-        <div class="btn-cart" id="btnCart">加入购物车</div>
-        <div class="btn-buy" id="btnBuy">立即购买</div>
+        <div class="btn-full" id="btnFull">请选择型号规格</div>
+        <div class="btn-split" id="btnSplit">
+          <div class="btn-cart" id="btnCart">加入购物车</div>
+          <div class="btn-buy" id="btnBuy">立即购买</div>
+        </div>
       </div>
     </div>
 
@@ -583,8 +602,10 @@
       spec: null
     };
 
+    var btnFull = document.getElementById('btnFull');
     var btnCart = document.getElementById('btnCart');
     var btnBuy = document.getElementById('btnBuy');
+    var btnSplit = document.getElementById('btnSplit');
     var modalOverlay = document.getElementById('modalOverlay');
 
     function openModal(modalId) {
@@ -728,21 +749,23 @@
 
     function updateButton() {
       if (!state.isLoggedIn) {
-        btnCart.textContent = '请先登录';
-        btnCart.className = 'btn-cart';
-        btnBuy.textContent = '请先登录';
-        btnBuy.className = 'btn-buy';
+        btnFull.textContent = '请先登录';
+        btnFull.className = 'btn-full';
+        btnFull.style.display = 'block';
+        btnSplit.style.display = 'none';
       } else if (!state.address) {
-        btnCart.textContent = '请填写地址';
-        btnCart.className = 'btn-cart';
-        btnBuy.textContent = '请填写地址';
-        btnBuy.className = 'btn-buy';
+        btnFull.textContent = '请填写地址';
+        btnFull.className = 'btn-full';
+        btnFull.style.display = 'block';
+        btnSplit.style.display = 'none';
       } else if (!state.model || !state.spec) {
-        btnCart.textContent = '请选择型号规格';
-        btnCart.className = 'btn-cart';
-        btnBuy.textContent = '请选择型号规格';
-        btnBuy.className = 'btn-buy';
+        btnFull.textContent = '请选择型号规格';
+        btnFull.className = 'btn-full active';
+        btnFull.style.display = 'block';
+        btnSplit.style.display = 'none';
       } else {
+        btnFull.style.display = 'none';
+        btnSplit.style.display = 'flex';
         btnCart.textContent = '加入购物车';
         btnCart.className = 'btn-cart active';
         btnBuy.textContent = '立即购买';
