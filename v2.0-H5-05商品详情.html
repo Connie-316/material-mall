@@ -117,7 +117,7 @@
     .sku-row:last-child { border-bottom: none; }
     .sku-label { font-size: 13px; color: #999; }
     .sku-value { font-size: 13px; color: #666; display: flex; align-items: center; gap: 4px; }
-    .sku-value span { color: #3370FF; }
+    .sku-value.has-value { color: #333; }
     .sku-value .arrow { color: #ccc; }
 
     .delivery-section {
@@ -195,47 +195,25 @@
     .action-icon-item svg { width: 22px; height: 22px; stroke: #666; fill: none; stroke-width: 1.5; }
     .action-icon-text { font-size: 10px; color: #999; }
 
-    .action-btn {
-      flex: 1;
-      display: flex;
-      gap: 8px;
-    }
-    .btn-cart {
-      flex: 1;
-      padding: 11px 0;
-      border: 1.5px solid #E5E5E5;
-      color: #ccc;
-      background: #fff;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: not-allowed;
-    }
-    .btn-cart.active {
-      border-color: #FF6B35;
-      color: #FF6B35;
-      cursor: pointer;
-    }
-    .btn-buy {
-      flex: 1.5;
-      padding: 11px 0;
-      background: #ccc;
-      color: #fff;
+    .action-btn { flex: 1; }
+    .btn-main {
+      width: 100%;
+      padding: 12px 0;
       border: none;
       border-radius: 8px;
-      text-align: center;
       font-size: 14px;
       font-weight: 600;
       cursor: not-allowed;
+      background: #ccc;
+      color: #fff;
     }
-    .btn-buy.active {
+    .btn-main.active {
       background: linear-gradient(90deg, #FF6B35, #F02C2C);
       box-shadow: 0 3px 8px rgba(240, 44, 44, 0.25);
       cursor: pointer;
     }
 
-    /* Modal Overlay */
+    /* Modal */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -246,11 +224,8 @@
       background: rgba(0,0,0,0.5);
       z-index: 200;
     }
-    .modal-overlay.show {
-      display: block;
-    }
+    .modal-overlay.show { display: block; }
 
-    /* SKU Modal */
     .sku-modal {
       display: none;
       position: fixed;
@@ -264,9 +239,7 @@
       max-height: 70vh;
       overflow-y: auto;
     }
-    .sku-modal.show {
-      display: block;
-    }
+    .sku-modal.show { display: block; }
     .modal-header {
       display: flex;
       justify-content: space-between;
@@ -293,12 +266,6 @@
       color: #3370FF;
       border: 1px solid #3370FF;
     }
-    .modal-option.disabled {
-      background: #f5f5f5;
-      color: #ccc;
-      cursor: not-allowed;
-    }
-
     .modal-footer {
       padding: 12px 16px;
       padding-bottom: calc(12px + env(safe-area-inset-bottom));
@@ -315,10 +282,17 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .modal-btn-confirm:disabled {
-      background: #ccc;
-      cursor: not-allowed;
+    .modal-btn-confirm:disabled { background: #ccc; cursor: not-allowed; }
+
+    .address-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
     }
+    .address-text.has-value { color: #333; }
+    .address-text.empty { color: #3370FF; }
+    .address-arrow { color: #ccc; }
   </style>
 </head>
 <body>
@@ -366,31 +340,24 @@
       <div class="sku-section" id="skuSection">
         <div class="sku-row" id="addressRow">
           <span class="sku-label">地址</span>
-          <span class="sku-value">
-            <span id="selectedAddress">广东深圳</span>
-            <span class="arrow">›</span>
-          </span>
-        </div>
-        <div class="sku-row" id="modelRow">
-          <span class="sku-label">型号</span>
-          <span class="sku-value" id="modelValue">
-            <span id="selectedModel">请选择型号</span>
-            <span class="arrow">›</span>
-          </span>
+          <div class="address-display">
+            <span class="address-text empty" id="addressText">请填写地址</span>
+            <span class="address-arrow">›</span>
+          </div>
         </div>
         <div class="sku-row" id="specRow">
-          <span class="sku-label">规格</span>
-          <span class="sku-value" id="specValue">
-            <span id="selectedSpec">请选择规格</span>
+          <span class="sku-label">型号规格</span>
+          <div class="sku-value">
+            <span id="specText" class="empty">请选择型号规格</span>
             <span class="arrow">›</span>
-          </span>
+          </div>
         </div>
       </div>
 
       <div class="delivery-section">
-        <span class="delivery-label">配送</span>
+        <span class="delivery-label">配送至</span>
         <div class="delivery-content">
-          <div class="delivery-city">至 <span id="deliveryAddress">广东深圳</span></div>
+          <div class="delivery-city" id="deliveryAddress">请填写收货地址</div>
           <div class="delivery-time">预计2-3天送达 · 快递免运费</div>
         </div>
       </div>
@@ -431,27 +398,29 @@
 
     <div class="action-bar">
       <div class="action-icons">
+        <div class="action-icon-item" onclick="location.href='v2.0-H5-01首页.html'">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <span class="action-icon-text">首页</span>
+        </div>
         <div class="action-icon-item" onclick="alert('客服')">
           <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <span class="action-icon-text">客服</span>
         </div>
-        <div class="action-icon-item" onclick="alert('收藏')">
-          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span class="action-icon-text">收藏</span>
+        <div class="action-icon-item" onclick="location.href='v2.0-H5-03购物车.html'">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="action-icon-text">购物车</span>
         </div>
       </div>
       <div class="action-btn">
-        <div class="btn-cart" id="btnCart">加入购物车</div>
-        <div class="btn-buy" id="btnBuy">请选择型号</div>
+        <div class="btn-main" id="btnMain" onclick="handleBtnClick()">请先登录</div>
       </div>
     </div>
 
   </div>
 
-  <!-- Modal Overlay -->
   <div class="modal-overlay" id="modalOverlay"></div>
 
-  <!-- Address Modal -->
+  <!-- 地址弹窗 -->
   <div class="sku-modal" id="addressModal">
     <div class="modal-header">
       <span class="modal-title">选择地址</span>
@@ -460,45 +429,32 @@
     <div class="modal-content">
       <div class="modal-section">
         <div class="modal-options">
-          <span class="modal-option" onclick="selectAddress('广东深圳')">广东深圳</span>
-          <span class="modal-option" onclick="selectAddress('上海')">上海</span>
-          <span class="modal-option" onclick="selectAddress('北京')">北京</span>
-          <span class="modal-option" onclick="selectAddress('浙江')">浙江</span>
-          <span class="modal-option" onclick="selectAddress('江苏')">江苏</span>
+          <span class="modal-option" onclick="selectAddress('广东省深圳市南山区')">广东省深圳市南山区</span>
+          <span class="modal-option" onclick="selectAddress('上海市浦东新区')">上海市浦东新区</span>
+          <span class="modal-option" onclick="selectAddress('北京市朝阳区')">北京市朝阳区</span>
+          <span class="modal-option" onclick="selectAddress('浙江省杭州市西湖区')">浙江省杭州市西湖区</span>
+          <span class="modal-option" onclick="selectAddress('江苏省南京市鼓楼区')">江苏省南京市鼓楼区</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Model Modal -->
-  <div class="sku-modal" id="modelModal">
+  <!-- 型号规格弹窗 -->
+  <div class="sku-modal" id="specModal">
     <div class="modal-header">
-      <span class="modal-title">选择型号</span>
+      <span class="modal-title">选择型号规格</span>
       <span class="modal-close" onclick="closeModal()">×</span>
     </div>
     <div class="modal-content">
       <div class="modal-section">
         <div class="modal-section-title">型号</div>
         <div class="modal-options">
-          <span class="modal-option" onclick="selectModel('CCA E-JCD-D10-L16-PC2-W2')">CCA E-JCD-D10-L16-PC2-W2</span>
-          <span class="modal-option" onclick="selectModel('CCB E-JCD-D10-L16-PC2-W2')">CCB E-JCD-D10-L16-PC2-W2</span>
-          <span class="modal-option" onclick="selectModel('CCD E-JCD-D10-L16-PC2-W2')">CCD E-JCD-D10-L16-PC2-W2</span>
-          <span class="modal-option" onclick="selectModel('CCE E-JCD-D10-L16-PC2-W2')">CCE E-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" onclick="selectModel('CCAE-JCD-D10-L16-PC2-W2')">CCAE-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" onclick="selectModel('CCBE-JCD-D10-L16-PC2-W2')">CCBE-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" onclick="selectModel('CCCE-JCD-D10-L16-PC2-W2')">CCCE-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" onclick="selectModel('CCDE-JCD-D10-L16-PC2-W2')">CCDE-JCD-D10-L16-PC2-W2</span>
         </div>
       </div>
-    </div>
-    <div class="modal-footer">
-      <button class="modal-btn-confirm" id="modelConfirm" disabled onclick="confirmModel()">确定</button>
-    </div>
-  </div>
-
-  <!-- Spec Modal -->
-  <div class="sku-modal" id="specModal">
-    <div class="modal-header">
-      <span class="modal-title">选择规格</span>
-      <span class="modal-close" onclick="closeModal()">×</span>
-    </div>
-    <div class="modal-content">
       <div class="modal-section">
         <div class="modal-section-title">规格</div>
         <div class="modal-options">
@@ -510,14 +466,19 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="modal-btn-confirm" id="specConfirm" disabled onclick="confirmSpec()">确定</button>
+      <button class="modal-btn-confirm" id="specConfirmBtn" onclick="confirmSpec()">确定</button>
     </div>
   </div>
 
   <script>
-    let selectedAddress = null;
-    let selectedModel = null;
-    let selectedSpec = null;
+    let state = {
+      isLoggedIn: true,
+      address: null,
+      model: null,
+      spec: null
+    };
+
+    const btnMain = document.getElementById('btnMain');
 
     function openModal(modalId) {
       document.getElementById('modalOverlay').classList.add('show');
@@ -529,94 +490,113 @@
       document.querySelectorAll('.sku-modal').forEach(m => m.classList.remove('show'));
     }
 
-    document.getElementById('addressRow').addEventListener('click', function() {
-      openModal('addressModal');
-    });
-
-    document.getElementById('modelRow').addEventListener('click', function() {
-      openModal('modelModal');
-    });
-
-    document.getElementById('specRow').addEventListener('click', function() {
-      openModal('specModal');
-    });
-
+    document.getElementById('addressRow').addEventListener('click', () => openModal('addressModal'));
+    document.getElementById('specRow').addEventListener('click', () => openModal('specModal'));
     document.getElementById('modalOverlay').addEventListener('click', closeModal);
 
+    function updateUI() {
+      const addressText = document.getElementById('addressText');
+      if (state.address) {
+        addressText.textContent = state.address;
+        addressText.className = 'address-text has-value';
+        document.getElementById('deliveryAddress').textContent = '至 ' + state.address;
+      } else {
+        addressText.textContent = '请填写地址';
+        addressText.className = 'address-text empty';
+        document.getElementById('deliveryAddress').textContent = '请填写收货地址';
+      }
+
+      const specText = document.getElementById('specText');
+      if (state.model && state.spec) {
+        specText.textContent = state.model + ' / ' + state.spec;
+        specText.className = 'has-value';
+        specText.style.color = '#333';
+      } else {
+        specText.textContent = '请选择型号规格';
+        specText.className = '';
+        specText.style.color = '#3370FF';
+      }
+
+      updateButton();
+    }
+
+    function updateButton() {
+      if (!state.isLoggedIn) {
+        btnMain.textContent = '请先登录';
+        btnMain.className = 'btn-main';
+        btnMain.onclick = () => alert('请先登录');
+      } else if (!state.address) {
+        btnMain.textContent = '请填写地址';
+        btnMain.className = 'btn-main';
+        btnMain.onclick = () => openModal('addressModal');
+      } else if (!state.model || !state.spec) {
+        btnMain.textContent = '请选择型号规格';
+        btnMain.className = 'btn-main';
+        btnMain.onclick = () => openModal('specModal');
+      } else {
+        btnMain.textContent = '加入购物车';
+        btnMain.className = 'btn-main active';
+        btnMain.onclick = () => {
+          alert('加入购物车成功！\n型号：' + state.model + '\n规格：' + state.spec);
+        };
+      }
+    }
+
     function selectAddress(addr) {
-      selectedAddress = addr;
-      document.getElementById('selectedAddress').textContent = addr;
-      document.getElementById('deliveryAddress').textContent = addr;
+      state.address = addr;
       document.querySelectorAll('#addressModal .modal-option').forEach(opt => {
         opt.classList.remove('selected');
         if (opt.textContent === addr) opt.classList.add('selected');
       });
+      updateUI();
       closeModal();
     }
 
     function selectModel(model) {
-      selectedModel = model;
-      document.getElementById('selectedModel').textContent = model;
-      document.querySelectorAll('#modelModal .modal-option').forEach(opt => {
-        opt.classList.remove('selected');
+      state.model = model;
+      document.querySelectorAll('#specModal .modal-option').forEach(opt => {
+        if (opt.textContent === model || opt.textContent === state.spec) {
+          opt.classList.remove('selected');
+        }
+      });
+      document.querySelectorAll('#specModal .modal-option').forEach(opt => {
         if (opt.textContent === model) opt.classList.add('selected');
       });
-      document.getElementById('modelConfirm').disabled = false;
+      updateConfirmBtn();
     }
 
     function selectSpec(spec) {
-      selectedSpec = spec;
-      document.getElementById('selectedSpec').textContent = spec;
+      state.spec = spec;
       document.querySelectorAll('#specModal .modal-option').forEach(opt => {
-        opt.classList.remove('selected');
+        if (opt.textContent === spec || opt.textContent === state.model) {
+          opt.classList.remove('selected');
+        }
+      });
+      document.querySelectorAll('#specModal .modal-option').forEach(opt => {
         if (opt.textContent === spec) opt.classList.add('selected');
       });
-      document.getElementById('specConfirm').disabled = false;
+      updateConfirmBtn();
     }
 
-    function confirmModel() {
-      if (selectedModel) {
-        document.getElementById('modelValue').innerHTML = '<span id="selectedModel">' + selectedModel + '</span><span class="arrow">›</span>';
-        closeModal();
-        updateButtons();
-      }
+    function updateConfirmBtn() {
+      const btn = document.getElementById('specConfirmBtn');
+      btn.disabled = !(state.model && state.spec);
     }
 
     function confirmSpec() {
-      if (selectedSpec) {
-        document.getElementById('specValue').innerHTML = '<span id="selectedSpec">' + selectedSpec + '</span><span class="arrow">›</span>';
+      if (state.model && state.spec) {
+        updateUI();
         closeModal();
-        updateButtons();
       }
     }
 
-    function updateButtons() {
-      const btnCart = document.getElementById('btnCart');
-      const btnBuy = document.getElementById('btnBuy');
-
-      if (selectedModel && selectedSpec) {
-        btnCart.className = 'btn-cart active';
-        btnBuy.className = 'btn-buy active';
-        btnBuy.textContent = '立即购买';
-        btnBuy.onclick = function() { alert('立即购买'); };
-        btnCart.onclick = function() { alert('加入购物车'); };
-      } else if (selectedModel && !selectedSpec) {
-        btnCart.className = 'btn-cart';
-        btnBuy.className = 'btn-buy active';
-        btnBuy.textContent = '请选择规格';
-        btnBuy.onclick = null;
-        btnCart.onclick = null;
-      } else {
-        btnCart.className = 'btn-cart';
-        btnBuy.className = 'btn-buy';
-        btnBuy.textContent = '请选择型号';
-        btnBuy.onclick = null;
-        btnCart.onclick = null;
-      }
+    function handleBtnClick() {
+      // 由按钮的onclick处理
     }
 
-    // Initialize with address
-    selectAddress('广东深圳');
+    // 初始化
+    state.address = '广东省深圳市南山区';
+    updateUI();
   </script>
 
 </body>
