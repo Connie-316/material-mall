@@ -44,7 +44,7 @@
 
     .content {
       padding-top: 48px;
-      padding-bottom: 70px;
+      padding-bottom: 80px;
     }
 
     .swiper {
@@ -166,6 +166,23 @@
     .param-label { width: 70px; font-size: 12px; color: #999; flex-shrink: 0; }
     .param-value { flex: 1; font-size: 12px; color: #333; }
 
+    .main-img-section {
+      background: #fff;
+      margin-top: 10px;
+      padding: 14px;
+    }
+    .main-img-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 10px; }
+    .main-img {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #E8F0FF, #CCE0FF);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .main-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+
     .action-bar {
       position: fixed;
       bottom: 0;
@@ -194,20 +211,31 @@
     .action-icon-item svg { width: 22px; height: 22px; stroke: #666; fill: none; stroke-width: 1.5; }
     .action-icon-text { font-size: 10px; color: #999; }
 
-    .action-btn { flex: 1; }
-    .btn-main {
-      width: 100%;
+    .action-btn { flex: 1; display: flex; gap: 8px; }
+    .btn-cart, .btn-buy {
+      flex: 1;
       padding: 12px 0;
       border: none;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 600;
-      cursor: not-allowed;
-      background: #ccc;
-      color: #fff;
       text-align: center;
     }
-    .btn-main.active {
+    .btn-cart {
+      background: #fff;
+      color: #FF6B35;
+      border: 1.5px solid #FF6B35;
+      cursor: not-allowed;
+    }
+    .btn-cart.active {
+      cursor: pointer;
+    }
+    .btn-buy {
+      background: #ccc;
+      color: #fff;
+      cursor: not-allowed;
+    }
+    .btn-buy.active {
       background: linear-gradient(90deg, #FF6B35, #F02C2C);
       box-shadow: 0 3px 8px rgba(240, 44, 44, 0.25);
       cursor: pointer;
@@ -251,7 +279,7 @@
     .modal-close { font-size: 24px; color: #ccc; cursor: pointer; }
     .modal-content { padding: 16px; }
 
-    .address-list { margin-bottom: 16px; }
+    .address-list { }
     .address-item {
       padding: 12px;
       background: #F9F9F9;
@@ -263,23 +291,6 @@
     .address-info { font-size: 13px; color: #333; margin-bottom: 4px; }
     .address-detail { font-size: 12px; color: #999; }
     .address-item.selected { background: #E8F0FF; border: 1px solid #3370FF; }
-
-    .modal-form { border-top: 1px solid #F0F0F0; padding-top: 16px; }
-    .form-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 12px; }
-    .form-row { margin-bottom: 12px; }
-    .form-label { font-size: 12px; color: #999; margin-bottom: 6px; }
-    .form-input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #E5E5E5;
-      border-radius: 6px;
-      font-size: 13px;
-      color: #333;
-      box-sizing: border-box;
-    }
-    .form-input:focus { border-color: #3370FF; outline: none; }
-    .form-row-inline { display: flex; gap: 10px; }
-    .form-row-inline .form-row { flex: 1; }
 
     .modal-footer {
       padding: 12px 16px;
@@ -297,6 +308,22 @@
       font-weight: 600;
       cursor: pointer;
     }
+
+    /* Add Address Modal */
+    .form-section { }
+    .form-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 12px; }
+    .form-row { margin-bottom: 12px; }
+    .form-label { font-size: 12px; color: #999; margin-bottom: 6px; }
+    .form-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #E5E5E5;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #333;
+      box-sizing: border-box;
+    }
+    .form-input:focus { border-color: #3370FF; outline: none; }
 
     /* Spec Modal */
     .modal-section { margin-bottom: 16px; }
@@ -429,6 +456,13 @@
         </div>
       </div>
 
+      <div class="main-img-section">
+        <div class="main-img-title">商品主图</div>
+        <div class="main-img">
+          <img src="https://picsum.photos/400/200?random=32" alt="商品主图">
+        </div>
+      </div>
+
     </div>
 
     <div class="action-bar">
@@ -447,7 +481,8 @@
         </div>
       </div>
       <div class="action-btn">
-        <div class="btn-main" id="btnMain">请先登录</div>
+        <div class="btn-cart" id="btnCart">加入购物车</div>
+        <div class="btn-buy" id="btnBuy">立即购买</div>
       </div>
     </div>
 
@@ -455,7 +490,7 @@
 
   <div class="modal-overlay" id="modalOverlay"></div>
 
-  <!-- 地址弹窗 -->
+  <!-- 地址选择弹窗 -->
   <div class="sku-modal" id="addressModal">
     <div class="modal-header">
       <span class="modal-title">选择地址</span>
@@ -472,8 +507,20 @@
           <div class="address-detail">上海市浦东新区张江高科技园区</div>
         </div>
       </div>
-      <div class="modal-form">
-        <div class="form-title">新增收货地址</div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-add" id="showAddAddressBtn">新增地址</button>
+    </div>
+  </div>
+
+  <!-- 新增地址弹窗 -->
+  <div class="sku-modal" id="addAddressModal">
+    <div class="modal-header">
+      <span class="modal-title">新增地址</span>
+      <span class="modal-close" id="closeAddAddressModal">×</span>
+    </div>
+    <div class="modal-content">
+      <div class="form-section">
         <div class="form-row">
           <div class="form-label">收货人</div>
           <input type="text" class="form-input" id="receiverName" placeholder="请输入收货人姓名">
@@ -493,7 +540,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button class="modal-btn-add" id="addAddressBtn">新增地址</button>
+      <button class="modal-btn-add" id="confirmAddAddressBtn">保存地址</button>
     </div>
   </div>
 
@@ -536,7 +583,8 @@
       spec: null
     };
 
-    var btnMain = document.getElementById('btnMain');
+    var btnCart = document.getElementById('btnCart');
+    var btnBuy = document.getElementById('btnBuy');
     var modalOverlay = document.getElementById('modalOverlay');
 
     function openModal(modalId) {
@@ -567,16 +615,15 @@
 
     document.getElementById('closeAddressModal').addEventListener('click', closeModal);
     document.getElementById('closeSpecModal').addEventListener('click', closeModal);
+    document.getElementById('closeAddAddressModal').addEventListener('click', closeModal);
 
     // 地址列表选择
-    var selectedAddressId = null;
     document.querySelectorAll('#addressList .address-item').forEach(function(item) {
       item.addEventListener('click', function() {
         document.querySelectorAll('#addressList .address-item').forEach(function(i) {
           i.classList.remove('selected');
         });
         this.classList.add('selected');
-        selectedAddressId = this.getAttribute('data-id');
         var detail = this.querySelector('.address-detail').textContent;
         state.address = detail;
         updateUI();
@@ -584,8 +631,16 @@
       });
     });
 
-    // 新增地址
-    document.getElementById('addAddressBtn').addEventListener('click', function() {
+    // 显示新增地址弹窗
+    document.getElementById('showAddAddressBtn').addEventListener('click', function() {
+      closeModal();
+      setTimeout(function() {
+        openModal('addAddressModal');
+      }, 100);
+    });
+
+    // 确认新增地址
+    document.getElementById('confirmAddAddressBtn').addEventListener('click', function() {
       var name = document.getElementById('receiverName').value;
       var phone = document.getElementById('receiverPhone').value;
       var city = document.getElementById('receiverCity').value;
@@ -663,7 +718,6 @@
       if (state.model && state.spec) {
         specText.textContent = state.model + ' / ' + state.spec;
         specText.style.color = '#333';
-        specText.className = 'has-value';
       } else {
         specText.textContent = '请选择型号规格';
         specText.style.color = '#3370FF';
@@ -674,27 +728,31 @@
 
     function updateButton() {
       if (!state.isLoggedIn) {
-        btnMain.textContent = '请先登录';
-        btnMain.className = 'btn-main';
-        btnMain.onclick = null;
+        btnCart.textContent = '请先登录';
+        btnCart.className = 'btn-cart';
+        btnBuy.textContent = '请先登录';
+        btnBuy.className = 'btn-buy';
       } else if (!state.address) {
-        btnMain.textContent = '请填写地址';
-        btnMain.className = 'btn-main';
-        btnMain.onclick = function() { openModal('addressModal'); };
+        btnCart.textContent = '请填写地址';
+        btnCart.className = 'btn-cart';
+        btnBuy.textContent = '请填写地址';
+        btnBuy.className = 'btn-buy';
       } else if (!state.model || !state.spec) {
-        btnMain.textContent = '请选择型号规格';
-        btnMain.className = 'btn-main';
-        btnMain.onclick = null;
+        btnCart.textContent = '请选择型号规格';
+        btnCart.className = 'btn-cart';
+        btnBuy.textContent = '请选择型号规格';
+        btnBuy.className = 'btn-buy';
       } else {
-        btnMain.textContent = '加入购物车';
-        btnMain.className = 'btn-main active';
-        btnMain.onclick = function() {
-          alert('加入购物车成功！');
-        };
+        btnCart.textContent = '加入购物车';
+        btnCart.className = 'btn-cart active';
+        btnBuy.textContent = '立即购买';
+        btnBuy.className = 'btn-buy active';
+        btnCart.onclick = function() { alert('加入购物车成功！'); };
+        btnBuy.onclick = function() { alert('立即购买！'); };
       }
     }
 
-    // 初始化默认地址
+    // 初始化
     state.address = '广东省深圳市南山区科技园南路88号';
     updateUI();
   </script>
