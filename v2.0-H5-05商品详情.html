@@ -38,6 +38,7 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
     .top-nav-icon { font-size: 24px; color: #333; cursor: pointer; }
+    .top-nav-title { font-size: 16px; font-weight: 600; color: #333; }
     .top-nav-icons { display: flex; gap: 16px; }
     .top-nav-icons svg { width: 22px; height: 22px; stroke: #333; fill: none; stroke-width: 2; }
 
@@ -77,13 +78,13 @@
 
     .price-section {
       background: #fff;
-      padding: 16px 14px;
+      padding: 14px;
     }
     .price-row { display: flex; align-items: baseline; gap: 3px; }
-    .price-symbol { font-size: 15px; font-weight: 600; color: #F02C2C; }
-    .price-value { font-size: 26px; font-weight: 700; color: #F02C2C; }
+    .price-symbol { font-size: 14px; font-weight: 600; color: #F02C2C; }
+    .price-value { font-size: 24px; font-weight: 700; color: #F02C2C; }
     .price-unit { font-size: 12px; color: #999; margin-left: 4px; }
-    .price-original { font-size: 12px; color: #999; text-decoration: line-through; margin-left: 10px; }
+    .price-original { font-size: 12px; color: #999; text-decoration: line-through; margin-left: 8px; }
 
     .goods-info {
       background: #fff;
@@ -106,43 +107,32 @@
       padding: 14px;
       cursor: pointer;
     }
-    .sku-header { display: flex; justify-content: space-between; align-items: center; }
-    .sku-title { font-size: 14px; font-weight: 600; color: #333; }
-    .sku-value { font-size: 13px; color: #666; }
-    .sku-options {
-      display: none;
-      margin-top: 12px;
-      padding: 12px;
-      background: #F5F5F5;
-      border-radius: 8px;
+    .sku-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #F0F0F0;
     }
-    .sku-options.show { display: block; }
-    .sku-row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .sku-option {
-      padding: 8px 16px;
-      background: #fff;
-      border-radius: 4px;
-      font-size: 13px;
-      color: #666;
-      border: 1px solid #E5E5E5;
-      cursor: pointer;
-    }
-    .sku-option.active {
-      background: #E8F0FF;
-      color: #3370FF;
-      border-color: #3370FF;
-    }
+    .sku-row:last-child { border-bottom: none; }
+    .sku-label { font-size: 13px; color: #999; }
+    .sku-value { font-size: 13px; color: #666; display: flex; align-items: center; gap: 4px; }
+    .sku-value span { color: #3370FF; }
+    .sku-value .arrow { color: #ccc; }
 
     .delivery-section {
       background: #fff;
       margin-top: 1px;
       padding: 12px 14px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 8px;
     }
     .delivery-label { font-size: 13px; color: #999; flex-shrink: 0; }
-    .delivery-value { font-size: 13px; color: #666; }
+    .delivery-content { flex: 1; }
+    .delivery-city { font-size: 13px; color: #666; margin-bottom: 4px; }
+    .delivery-time { font-size: 11px; color: #999; }
+    .delivery-change { font-size: 12px; color: #3370FF; }
 
     .shop-section {
       background: #fff;
@@ -213,38 +203,120 @@
     .btn-cart {
       flex: 1;
       padding: 11px 0;
-      border: 1.5px solid #FF6B35;
-      color: #FF6B35;
+      border: 1.5px solid #E5E5E5;
+      color: #ccc;
       background: #fff;
       border-radius: 8px;
       text-align: center;
       font-size: 14px;
       font-weight: 600;
+      cursor: not-allowed;
+    }
+    .btn-cart.active {
+      border-color: #FF6B35;
+      color: #FF6B35;
       cursor: pointer;
     }
     .btn-buy {
       flex: 1.5;
       padding: 11px 0;
+      background: #ccc;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: not-allowed;
+    }
+    .btn-buy.active {
+      background: linear-gradient(90deg, #FF6B35, #F02C2C);
+      box-shadow: 0 3px 8px rgba(240, 44, 44, 0.25);
+      cursor: pointer;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+    }
+    .modal-overlay.show {
+      display: block;
+    }
+
+    /* SKU Modal */
+    .sku-modal {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 375px;
+      background: #fff;
+      border-radius: 16px 16px 0 0;
+      z-index: 201;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    .sku-modal.show {
+      display: block;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid #F0F0F0;
+    }
+    .modal-title { font-size: 15px; font-weight: 600; color: #333; }
+    .modal-close { font-size: 24px; color: #ccc; cursor: pointer; }
+    .modal-content { padding: 16px; }
+    .modal-section { margin-bottom: 16px; }
+    .modal-section-title { font-size: 13px; color: #999; margin-bottom: 10px; }
+    .modal-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .modal-option {
+      padding: 8px 16px;
+      background: #F5F5F5;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+    }
+    .modal-option.selected {
+      background: #E8F0FF;
+      color: #3370FF;
+      border: 1px solid #3370FF;
+    }
+    .modal-option.disabled {
+      background: #f5f5f5;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .modal-footer {
+      padding: 12px 16px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      border-top: 1px solid #F0F0F0;
+    }
+    .modal-btn-confirm {
+      width: 100%;
+      padding: 14px;
       background: linear-gradient(90deg, #FF6B35, #F02C2C);
       color: #fff;
       border: none;
       border-radius: 8px;
-      text-align: center;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(240, 44, 44, 0.25);
     }
-    .btn-disabled {
-      flex: 1.5;
-      padding: 11px 0;
-      background: #CCC;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 600;
+    .modal-btn-confirm:disabled {
+      background: #ccc;
       cursor: not-allowed;
     }
   </style>
@@ -255,6 +327,7 @@
 
     <div class="top-nav">
       <span class="top-nav-icon" onclick="history.back()">‹</span>
+      <span class="top-nav-title">商品详情</span>
       <div class="top-nav-icons">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg>
       </div>
@@ -291,21 +364,35 @@
       </div>
 
       <div class="sku-section" id="skuSection">
-        <div class="sku-header">
-          <span class="sku-title">选择规格</span>
-          <span class="sku-value" id="skuHint">请选择 ›</span>
+        <div class="sku-row" id="addressRow">
+          <span class="sku-label">地址</span>
+          <span class="sku-value">
+            <span id="selectedAddress">广东深圳</span>
+            <span class="arrow">›</span>
+          </span>
         </div>
-        <div class="sku-options" id="skuOptions">
-          <div class="sku-row">
-            <span class="sku-option active" data-value="标准件">标准件</span>
-            <span class="sku-option" data-value="定制件">定制件</span>
-          </div>
+        <div class="sku-row" id="modelRow">
+          <span class="sku-label">型号</span>
+          <span class="sku-value" id="modelValue">
+            <span id="selectedModel">请选择型号</span>
+            <span class="arrow">›</span>
+          </span>
+        </div>
+        <div class="sku-row" id="specRow">
+          <span class="sku-label">规格</span>
+          <span class="sku-value" id="specValue">
+            <span id="selectedSpec">请选择规格</span>
+            <span class="arrow">›</span>
+          </span>
         </div>
       </div>
 
       <div class="delivery-section">
         <span class="delivery-label">配送</span>
-        <span class="delivery-value">广东深圳 › 快递免运费</span>
+        <div class="delivery-content">
+          <div class="delivery-city">至 <span id="deliveryAddress">广东深圳</span></div>
+          <div class="delivery-time">预计2-3天送达 · 快递免运费</div>
+        </div>
       </div>
 
       <div class="shop-section">
@@ -344,68 +431,192 @@
 
     <div class="action-bar">
       <div class="action-icons">
-        <div class="action-icon-item" onclick="location.href='v2.0-H5-01首页.html'">
-          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-          <span class="action-icon-text">首页</span>
-        </div>
-        <div class="action-icon-item">
+        <div class="action-icon-item" onclick="alert('客服')">
           <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           <span class="action-icon-text">客服</span>
         </div>
-        <div class="action-icon-item" onclick="location.href='v2.0-H5-03购物车.html'">
-          <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          <span class="action-icon-text">购物车</span>
+        <div class="action-icon-item" onclick="alert('收藏')">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="action-icon-text">收藏</span>
         </div>
       </div>
       <div class="action-btn">
-        <div class="btn-cart">加入购物车</div>
-        <div class="btn-disabled" id="buyBtn">请选择规格</div>
+        <div class="btn-cart" id="btnCart">加入购物车</div>
+        <div class="btn-buy" id="btnBuy">请选择型号</div>
       </div>
     </div>
 
   </div>
 
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+
+  <!-- Address Modal -->
+  <div class="sku-modal" id="addressModal">
+    <div class="modal-header">
+      <span class="modal-title">选择地址</span>
+      <span class="modal-close" onclick="closeModal()">×</span>
+    </div>
+    <div class="modal-content">
+      <div class="modal-section">
+        <div class="modal-options">
+          <span class="modal-option" onclick="selectAddress('广东深圳')">广东深圳</span>
+          <span class="modal-option" onclick="selectAddress('上海')">上海</span>
+          <span class="modal-option" onclick="selectAddress('北京')">北京</span>
+          <span class="modal-option" onclick="selectAddress('浙江')">浙江</span>
+          <span class="modal-option" onclick="selectAddress('江苏')">江苏</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Modal -->
+  <div class="sku-modal" id="modelModal">
+    <div class="modal-header">
+      <span class="modal-title">选择型号</span>
+      <span class="modal-close" onclick="closeModal()">×</span>
+    </div>
+    <div class="modal-content">
+      <div class="modal-section">
+        <div class="modal-section-title">型号</div>
+        <div class="modal-options">
+          <span class="modal-option" onclick="selectModel('CCA E-JCD-D10-L16-PC2-W2')">CCA E-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" onclick="selectModel('CCB E-JCD-D10-L16-PC2-W2')">CCB E-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" onclick="selectModel('CCD E-JCD-D10-L16-PC2-W2')">CCD E-JCD-D10-L16-PC2-W2</span>
+          <span class="modal-option" onclick="selectModel('CCE E-JCD-D10-L16-PC2-W2')">CCE E-JCD-D10-L16-PC2-W2</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-confirm" id="modelConfirm" disabled onclick="confirmModel()">确定</button>
+    </div>
+  </div>
+
+  <!-- Spec Modal -->
+  <div class="sku-modal" id="specModal">
+    <div class="modal-header">
+      <span class="modal-title">选择规格</span>
+      <span class="modal-close" onclick="closeModal()">×</span>
+    </div>
+    <div class="modal-content">
+      <div class="modal-section">
+        <div class="modal-section-title">规格</div>
+        <div class="modal-options">
+          <span class="modal-option" onclick="selectSpec('标准件')">标准件</span>
+          <span class="modal-option" onclick="selectSpec('定制件')">定制件</span>
+          <span class="modal-option" onclick="selectSpec('标准件+包装')">标准件+包装</span>
+          <span class="modal-option" onclick="selectSpec('定制件+包装')">定制件+包装</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-confirm" id="specConfirm" disabled onclick="confirmSpec()">确定</button>
+    </div>
+  </div>
+
   <script>
-    let selectedSku = null;
+    let selectedAddress = null;
+    let selectedModel = null;
+    let selectedSpec = null;
 
-    document.getElementById('skuSection').addEventListener('click', function(e) {
-      if (e.target.classList.contains('sku-option')) return;
-      const options = document.getElementById('skuOptions');
-      options.classList.toggle('show');
+    function openModal(modalId) {
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById(modalId).classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.querySelectorAll('.sku-modal').forEach(m => m.classList.remove('show'));
+    }
+
+    document.getElementById('addressRow').addEventListener('click', function() {
+      openModal('addressModal');
     });
 
-    document.querySelectorAll('.sku-option').forEach(opt => {
-      opt.addEventListener('click', function(e) {
-        e.stopPropagation();
-        document.querySelectorAll('.sku-option').forEach(item => item.classList.remove('active'));
-        this.classList.add('active');
-        selectedSku = this.dataset.value;
-        document.getElementById('skuHint').textContent = '已选: ' + selectedSku + ' ›';
-        document.getElementById('skuOptions').classList.remove('show');
-        updateBuyBtn();
+    document.getElementById('modelRow').addEventListener('click', function() {
+      openModal('modelModal');
+    });
+
+    document.getElementById('specRow').addEventListener('click', function() {
+      openModal('specModal');
+    });
+
+    document.getElementById('modalOverlay').addEventListener('click', closeModal);
+
+    function selectAddress(addr) {
+      selectedAddress = addr;
+      document.getElementById('selectedAddress').textContent = addr;
+      document.getElementById('deliveryAddress').textContent = addr;
+      document.querySelectorAll('#addressModal .modal-option').forEach(opt => {
+        opt.classList.remove('selected');
+        if (opt.textContent === addr) opt.classList.add('selected');
       });
-    });
+      closeModal();
+    }
 
-    function updateBuyBtn() {
-      const buyBtn = document.getElementById('buyBtn');
-      if (selectedSku) {
-        buyBtn.textContent = '立即购买';
-        buyBtn.className = 'btn-buy';
-      } else {
-        buyBtn.textContent = '请选择规格';
-        buyBtn.className = 'btn-disabled';
+    function selectModel(model) {
+      selectedModel = model;
+      document.getElementById('selectedModel').textContent = model;
+      document.querySelectorAll('#modelModal .modal-option').forEach(opt => {
+        opt.classList.remove('selected');
+        if (opt.textContent === model) opt.classList.add('selected');
+      });
+      document.getElementById('modelConfirm').disabled = false;
+    }
+
+    function selectSpec(spec) {
+      selectedSpec = spec;
+      document.getElementById('selectedSpec').textContent = spec;
+      document.querySelectorAll('#specModal .modal-option').forEach(opt => {
+        opt.classList.remove('selected');
+        if (opt.textContent === spec) opt.classList.add('selected');
+      });
+      document.getElementById('specConfirm').disabled = false;
+    }
+
+    function confirmModel() {
+      if (selectedModel) {
+        document.getElementById('modelValue').innerHTML = '<span id="selectedModel">' + selectedModel + '</span><span class="arrow">›</span>';
+        closeModal();
+        updateButtons();
       }
     }
 
-    document.querySelector('.btn-cart').addEventListener('click', function() {
-      alert('加入购物车' + (selectedSku ? ' - ' + selectedSku : ''));
-    });
-
-    document.getElementById('buyBtn').addEventListener('click', function() {
-      if (selectedSku) {
-        alert('立即购买 - ' + selectedSku);
+    function confirmSpec() {
+      if (selectedSpec) {
+        document.getElementById('specValue').innerHTML = '<span id="selectedSpec">' + selectedSpec + '</span><span class="arrow">›</span>';
+        closeModal();
+        updateButtons();
       }
-    });
+    }
+
+    function updateButtons() {
+      const btnCart = document.getElementById('btnCart');
+      const btnBuy = document.getElementById('btnBuy');
+
+      if (selectedModel && selectedSpec) {
+        btnCart.className = 'btn-cart active';
+        btnBuy.className = 'btn-buy active';
+        btnBuy.textContent = '立即购买';
+        btnBuy.onclick = function() { alert('立即购买'); };
+        btnCart.onclick = function() { alert('加入购物车'); };
+      } else if (selectedModel && !selectedSpec) {
+        btnCart.className = 'btn-cart';
+        btnBuy.className = 'btn-buy active';
+        btnBuy.textContent = '请选择规格';
+        btnBuy.onclick = null;
+        btnCart.onclick = null;
+      } else {
+        btnCart.className = 'btn-cart';
+        btnBuy.className = 'btn-buy';
+        btnBuy.textContent = '请选择型号';
+        btnBuy.onclick = null;
+        btnCart.onclick = null;
+      }
+    }
+
+    // Initialize with address
+    selectAddress('广东深圳');
   </script>
 
 </body>
